@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,600;0,700;1,400&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<script src="./wordroots-data.js"></script>
+<style>
+  body { margin: 0; background: #f7f2ec; color: #241f22; -webkit-text-size-adjust: 100%; }
+  a { color: #5c2a4e; }
+  a:hover { color: #8a3f6f; }
+  input, textarea, button { font-family: 'Public Sans', system-ui, sans-serif; font-size: 16px; }
+  input:focus, textarea:focus { outline: none; border-color: #5c2a4e; }
+  @keyframes wr-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+</style>
+</helmet>
+<div style="min-height: 100vh; padding: clamp(14px, 3.5vw, 36px) clamp(12px, 3.5vw, 28px) 72px; display: flex; flex-direction: column; align-items: center; gap: clamp(18px, 3vw, 26px); font-family: 'Public Sans', system-ui, sans-serif;">
+
+  <div style="width: 100%; max-width: 880px; display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; border-bottom: 1px solid #e2d8d0; padding-bottom: 13px; flex-wrap: wrap;">
+    <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1 1 200px;">
+      <div style="font-family: Bitter, Georgia, serif; font-size: clamp(21px, 5vw, 25px); font-weight: 700; letter-spacing: -0.01em;">{{ t.title }}</div>
+      <div style="font-size: 13px; color: #7c6f74; text-wrap: pretty;">{{ breadcrumb }}</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px; flex: 0 0 auto; flex-wrap: wrap;">
+      <div style="font-family: Bitter, Georgia, serif; font-size: 14px; color: #7c6f74; white-space: nowrap;">{{ progress }}</div>
+      <sc-if value="{{ showNav }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button onClick="{{ goBack }}" style="min-height: 44px; font-size: 13px; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 5px; padding: 0 14px; cursor: pointer; white-space: nowrap;" style-hover="background: #efe7df;">{{ t.back }}</button>
+          <sc-if value="{{ showScoresBtn }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ goScores }}" style="min-height: 44px; font-size: 13px; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 5px; padding: 0 14px; cursor: pointer; white-space: nowrap;" style-hover="background: #efe7df;">{{ t.leaderboard }}</button>
+          </sc-if>
+          <sc-if value="{{ isAdminUser }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ goAdmin }}" style="min-height: 44px; font-size: 13px; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 5px; padding: 0 14px; cursor: pointer; white-space: nowrap;" style-hover="background: #efe7df;">{{ t.manage }}</button>
+          </sc-if>
+          <button onClick="{{ goFeedback }}" title="{{ t.feedback }}" style="min-height: 44px; width: 44px; display: inline-flex; align-items: center; justify-content: center; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 5px; cursor: pointer;" style-hover="background: #efe7df;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#5c2a4e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;">
+              <path d="M12 4.2l2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.6-4.8 2.6.9-5.4-3.9-3.8 5.4-.8z"></path>
+            </svg>
+          </button>
+          <button onClick="{{ goSuggest }}" title="{{ t.suggestTitle }}" style="min-height: 44px; width: 44px; display: inline-flex; align-items: center; justify-content: center; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 5px; cursor: pointer;" style-hover="background: #efe7df;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#5c2a4e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;">
+              <path d="M20.5 12.6a7.5 7.5 0 0 1-7.5 7.4 8 8 0 0 1-3.3-.7L4.2 21l1.4-4.6a7.2 7.2 0 0 1-1.1-3.8 7.5 7.5 0 0 1 7.5-7.4 7.5 7.5 0 0 1 8.5 7.4z"></path>
+              <path d="M13 9.6v5.2M10.4 12.2h5.2"></path>
+            </svg>
+          </button>
+          <sc-if value="{{ hasLinkedIn }}" hint-placeholder-val="{{ false }}">
+          <a href="{{ linkedinUrl }}" target="_blank" rel="noopener" title="{{ t.connectLinkedIn }}" style="min-height: 44px; width: 44px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #d9cec6; border-radius: 5px; text-decoration: none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#5c2a4e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;">
+              <rect x="3.5" y="3.5" width="17" height="17" rx="3"></rect>
+              <path d="M7.8 10.4v6.1"></path>
+              <path d="M7.8 7.6v.01"></path>
+              <path d="M11.6 16.5v-6.1M11.6 12.8a2.4 2.4 0 0 1 4.8 0v3.7"></path>
+            </svg>
+          </a>
+          </sc-if>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+
+  <sc-if value="{{ isLang }}" hint-placeholder-val="{{ true }}">
+    <div style="width: 100%; max-width: 880px; display: flex; flex-direction: column; gap: 18px;">
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <div style="font-family: Bitter, Georgia, serif; font-size: clamp(22px, 6vw, 28px); font-weight: 600; text-wrap: balance;">{{ t.pickLang }}</div>
+        <div style="font-size: 14px; color: #7c6f74; text-wrap: pretty;">{{ t.pickLangSub }}</div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 175px), 1fr)); gap: 12px;">
+
+        <button onClick="{{ pickEn }}" style="{{ tileStyle }}">
+          <svg viewBox="0 0 60 40" style="width: 60px; height: 40px; border: 1px solid #ded3ca; flex: 0 0 auto;">
+            <rect width="60" height="40" fill="#fffdfa"></rect>
+            <rect x="25" width="10" height="40" fill="#c8102e"></rect>
+            <rect y="15" width="60" height="10" fill="#c8102e"></rect>
+          </svg>
+          <div style="display: flex; flex-direction: column; gap: 2px; text-align: left; min-width: 0;">
+            <div style="font-family: Bitter, Georgia, serif; font-size: 19px; font-weight: 600;">English</div>
+            <div style="font-size: 13px; color: #7c6f74;">England</div>
+          </div>
+        </button>
+
+        <button onClick="{{ pickFr }}" style="{{ tileStyle }}">
+          <svg viewBox="0 0 60 40" style="width: 60px; height: 40px; border: 1px solid #ded3ca; flex: 0 0 auto;">
+            <rect width="20" height="40" fill="#0055a4"></rect>
+            <rect x="20" width="20" height="40" fill="#fffdfa"></rect>
+            <rect x="40" width="20" height="40" fill="#ef4135"></rect>
+          </svg>
+          <div style="display: flex; flex-direction: column; gap: 2px; text-align: left; min-width: 0;">
+            <div style="font-family: Bitter, Georgia, serif; font-size: 19px; font-weight: 600;">Français</div>
+            <div style="font-size: 13px; color: #7c6f74;">France</div>
+          </div>
+        </button>
+
+        <button onClick="{{ pickRo }}" style="{{ tileStyle }}">
+          <svg viewBox="0 0 60 40" style="width: 60px; height: 40px; border: 1px solid #ded3ca; flex: 0 0 auto;">
+            <rect width="20" height="40" fill="#002b7f"></rect>
+            <rect x="20" width="20" height="40" fill="#fcd116"></rect>
+            <rect x="40" width="20" height="40" fill="#ce1126"></rect>
+          </svg>
+          <div style="display: flex; flex-direction: column; gap: 2px; text-align: left; min-width: 0;">
+            <div style="font-family: Bitter, Georgia, serif; font-size: 19px; font-weight: 600;">Română</div>
+            <div style="font-size: 13px; color: #7c6f74;">România</div>
+          </div>
+        </button>
+
+        <button onClick="{{ pickEs }}" style="{{ tileStyle }}">
+          <svg viewBox="0 0 60 40" style="width: 60px; height: 40px; border: 1px solid #ded3ca; flex: 0 0 auto;">
+            <rect width="60" height="40" fill="#aa151b"></rect>
+            <rect y="10" width="60" height="20" fill="#f1bf00"></rect>
+          </svg>
+          <div style="display: flex; flex-direction: column; gap: 2px; text-align: left; min-width: 0;">
+            <div style="font-family: Bitter, Georgia, serif; font-size: 19px; font-weight: 600;">Español</div>
+            <div style="font-size: 13px; color: #7c6f74;">España</div>
+          </div>
+        </button>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 14px; border-top: 1px solid #e2d8d0; padding-top: 18px; margin-top: 6px;">
+        <div style="font-size: 13px; color: #7c6f74;">{{ t.credit }}</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+          <sc-if value="{{ hasLinkedIn }}" hint-placeholder-val="{{ false }}">
+          <a href="{{ linkedinUrl }}" target="_blank" rel="noopener" style="min-height: 44px; display: inline-flex; align-items: center; gap: 9px; font-size: 14px; font-weight: 500; text-decoration: none; border: 1px solid #cdbfc6; border-radius: 5px; padding: 0 15px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#5c2a4e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px; flex: 0 0 auto;">
+              <rect x="3.5" y="3.5" width="17" height="17" rx="3"></rect>
+              <path d="M7.8 10.4v6.1"></path>
+              <path d="M7.8 7.6v.01"></path>
+              <path d="M11.6 16.5v-6.1M11.6 12.8a2.4 2.4 0 0 1 4.8 0v3.7"></path>
+            </svg>
+            {{ t.connectLinkedIn }}
+          </a>
+          </sc-if>
+          <button onClick="{{ goFeedback }}" style="min-height: 44px; display: inline-flex; align-items: center; gap: 9px; font-size: 14px; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 5px; padding: 0 15px; cursor: pointer;" style-hover="background: #efe7df;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#5c2a4e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px; flex: 0 0 auto;">
+              <path d="M12 4.2l2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.6-4.8 2.6.9-5.4-3.9-3.8 5.4-.8z"></path>
+            </svg>
+            {{ t.feedback }}
+          </button>
+          <button onClick="{{ goSuggest }}" style="min-height: 44px; display: inline-flex; align-items: center; gap: 9px; font-size: 14px; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 5px; padding: 0 15px; cursor: pointer;" style-hover="background: #efe7df;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#5c2a4e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px; flex: 0 0 auto;">
+              <path d="M20.5 12.6a7.5 7.5 0 0 1-7.5 7.4 8 8 0 0 1-3.3-.7L4.2 21l1.4-4.6a7.2 7.2 0 0 1-1.1-3.8 7.5 7.5 0 0 1 7.5-7.4 7.5 7.5 0 0 1 8.5 7.4z"></path>
+              <path d="M13 9.6v5.2M10.4 12.2h5.2"></path>
+            </svg>
+            {{ t.suggestTitle }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isFeedback }}" hint-placeholder-val="{{ false }}">
+    <div style="width: 100%; max-width: 620px; display: flex; flex-direction: column; gap: 16px; background: #fffdfa; border: 1px solid #e2d8d0; border-radius: 5px; padding: clamp(20px, 5vw, 30px);">
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <div style="font-family: Bitter, Georgia, serif; font-size: 21px; font-weight: 600;">{{ t.rateTitle }}</div>
+        <div style="font-size: 13px; line-height: 1.5; color: #7c6f74; text-wrap: pretty;">{{ t.rateSub }}</div>
+      </div>
+
+      <div style="display: flex; gap: 6px;">
+        <sc-for list="{{ stars }}" as="st" hint-placeholder-count="5">
+          <button onClick="{{ st.set }}" style="{{ st.style }}">
+            <svg viewBox="0 0 24 24" stroke="#5c2a4e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="{{ st.svgStyle }}">
+              <path d="M12 4.2l2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.6-4.8 2.6.9-5.4-3.9-3.8 5.4-.8z"></path>
+            </svg>
+          </button>
+        </sc-for>
+      </div>
+
+      <textarea value="{{ fbNote }}" onChange="{{ setFbNote }}" rows="4" placeholder="{{ t.yourNote }}" style="padding: 11px 12px; border: 1px solid #ded3ca; border-radius: 5px; background: #fff; color: #241f22; resize: vertical; font-size: 14px; line-height: 1.5;"></textarea>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+        <button onClick="{{ copyFeedback }}" style="min-height: 46px; font-size: 14px; color: #fffdfa; background: #5c2a4e; border: 1px solid #5c2a4e; border-radius: 5px; padding: 0 18px; cursor: pointer;" style-hover="background: #47203c;">{{ t.copyFeedback }}</button>
+        <sc-if value="{{ hasLinkedIn }}" hint-placeholder-val="{{ false }}"><a href="{{ linkedinUrl }}" target="_blank" rel="noopener" style="min-height: 46px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 500; text-decoration: none; border: 1px solid #cdbfc6; border-radius: 5px; padding: 0 16px;">{{ t.connectLinkedIn }}</a></sc-if>
+      </div>
+      <div style="font-size: 13px; color: #5c2a4e; min-height: 18px;">{{ status }}</div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isSuggest }}" hint-placeholder-val="{{ false }}">
+    <div style="width: 100%; max-width: 620px; display: flex; flex-direction: column; gap: 16px; background: #fffdfa; border: 1px solid #e2d8d0; border-radius: 5px; padding: clamp(20px, 5vw, 30px);">
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <div style="font-family: Bitter, Georgia, serif; font-size: 21px; font-weight: 600;">{{ t.suggestTitle }}</div>
+        <div style="font-size: 13px; line-height: 1.5; color: #7c6f74; text-wrap: pretty;">{{ t.suggestSub }}</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">{{ t.sugCategory }}</div>
+        <input value="{{ sugCat }}" onChange="{{ setSugCat }}" placeholder="{{ t.sugCatPh }}" style="min-height: 46px; padding: 0 12px; border: 1px solid #ded3ca; border-radius: 5px; background: #fff; color: #241f22;" />
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">{{ t.sugInWhich }}</div>
+        <textarea value="{{ sugWords }}" onChange="{{ setSugWords }}" rows="3" placeholder="{{ t.sugWordsPh }}" style="padding: 11px 12px; border: 1px solid #ded3ca; border-radius: 5px; background: #fff; color: #241f22; resize: vertical; font-size: 14px; line-height: 1.5;"></textarea>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">{{ t.sugWhy }}</div>
+        <textarea value="{{ sugWhy }}" onChange="{{ setSugWhy }}" rows="2" style="padding: 11px 12px; border: 1px solid #ded3ca; border-radius: 5px; background: #fff; color: #241f22; resize: vertical; font-size: 14px; line-height: 1.5;"></textarea>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+        <button onClick="{{ copySuggestion }}" style="min-height: 46px; font-size: 14px; color: #fffdfa; background: #5c2a4e; border: 1px solid #5c2a4e; border-radius: 5px; padding: 0 18px; cursor: pointer;" style-hover="background: #47203c;">{{ t.copySuggestion }}</button>
+        <sc-if value="{{ hasLinkedIn }}" hint-placeholder-val="{{ false }}"><a href="{{ linkedinUrl }}" target="_blank" rel="noopener" style="min-height: 46px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 500; text-decoration: none; border: 1px solid #cdbfc6; border-radius: 5px; padding: 0 16px;">{{ t.connectLinkedIn }}</a></sc-if>
+      </div>
+      <div style="font-size: 13px; color: #5c2a4e; min-height: 18px;">{{ status }}</div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isMode }}" hint-placeholder-val="{{ false }}">
+    <div style="width: 100%; max-width: 880px; display: flex; flex-direction: column; gap: 18px;">
+      <sc-if value="{{ isGuest }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 5px; background: #f9f3f6; border: 1px solid #e8dbe2; border-radius: 5px; padding: 15px 18px;">
+          <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">{{ t.sharedDeck }}</div>
+          <div style="font-size: 14px; line-height: 1.5; color: #3f3639; text-wrap: pretty;">{{ t.guestNote }}</div>
+        </div>
+      </sc-if>
+      <div style="font-family: Bitter, Georgia, serif; font-size: clamp(22px, 6vw, 28px); font-weight: 600; text-wrap: balance;">{{ t.pickMode }}</div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 12px;">
+        <button onClick="{{ chooseStudy }}" style="{{ bigTileStyle }}">
+          <div style="display: flex; flex-direction: column; justify-content: center; gap: 6px; min-width: 0; flex: 1 1 auto;">
+            <div style="font-family: Bitter, Georgia, serif; font-size: 24px; font-weight: 600; text-align: left;">{{ t.study }}</div>
+            <div style="font-size: 14px; line-height: 1.5; color: #7c6f74; text-align: left; text-wrap: pretty;">{{ t.studySub }}</div>
+          </div>
+          <img src="uploads/education.png" alt="Study" style="width: 34px; height: 34px; flex: 0 0 auto; object-fit: contain;" />
+        </button>
+        <button onClick="{{ chooseGame }}" style="{{ bigTileStyle }}">
+          <div style="display: flex; flex-direction: column; justify-content: center; gap: 6px; min-width: 0; flex: 1 1 auto;">
+            <div style="font-family: Bitter, Georgia, serif; font-size: 24px; font-weight: 600; text-align: left;">{{ t.game }}</div>
+            <div style="font-size: 14px; line-height: 1.5; color: #7c6f74; text-align: left; text-wrap: pretty;">{{ t.gameSub }}</div>
+          </div>
+          <img src="uploads/console--wireless.png" alt="Game" style="width: 34px; height: 34px; flex: 0 0 auto; object-fit: contain;" />
+        </button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isCat }}" hint-placeholder-val="{{ false }}">
+    <div style="width: 100%; max-width: 880px; display: flex; flex-direction: column; gap: 18px;">
+      <div style="font-family: Bitter, Georgia, serif; font-size: clamp(22px, 6vw, 28px); font-weight: 600; text-wrap: balance;">{{ t.pickCat }}</div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 12px;">
+        <button onClick="{{ cat0.pick }}" style="{{ catTileStyle }}">
+          <div style="display: flex; flex-direction: column; justify-content: center; gap: 5px; min-width: 0; flex: 1 1 auto;">
+            <div style="{{ catLabelStyle }}">{{ cat0.name }}</div>
+            <div style="font-size: 13px; color: #7c6f74; text-align: left;">{{ cat0.count }}</div>
+          </div>
+          <img src="uploads/random--samples.png" alt="Mixed words" style="width: 30px; height: 30px; flex: 0 0 auto; object-fit: contain;" />
+        </button>
+        <button onClick="{{ cat1.pick }}" style="{{ catTileStyle }}">
+          <div style="display: flex; flex-direction: column; justify-content: center; gap: 5px; min-width: 0; flex: 1 1 auto;">
+            <div style="{{ catLabelStyle }}">{{ cat1.name }}</div>
+            <div style="font-size: 13px; color: #7c6f74; text-align: left;">{{ cat1.count }}</div>
+          </div>
+          <img src="uploads/pizza.png" alt="Italian food" style="width: 30px; height: 30px; flex: 0 0 auto; object-fit: contain;" />
+        </button>
+        <button onClick="{{ cat2.pick }}" style="{{ catTileStyle }}">
+          <div style="display: flex; flex-direction: column; justify-content: center; gap: 5px; min-width: 0; flex: 1 1 auto;">
+            <div style="{{ catLabelStyle }}">{{ cat2.name }}</div>
+            <div style="font-size: 13px; color: #7c6f74; text-align: left;">{{ cat2.count }}</div>
+          </div>
+          <img src="uploads/banking.png" alt="Finance" style="width: 30px; height: 30px; flex: 0 0 auto; object-fit: contain;" />
+        </button>
+        <button onClick="{{ cat3.pick }}" style="{{ catTileStyle }}">
+          <div style="display: flex; flex-direction: column; justify-content: center; gap: 5px; min-width: 0; flex: 1 1 auto;">
+            <div style="{{ catLabelStyle }}">{{ cat3.name }}</div>
+            <div style="font-size: 13px; color: #7c6f74; text-align: left;">{{ cat3.count }}</div>
+          </div>
+          <img src="uploads/medical.png" alt="Medicine" style="width: 30px; height: 30px; flex: 0 0 auto; object-fit: contain;" />
+        </button>
+        <button onClick="{{ cat4.pick }}" style="{{ catTileStyle }}">
+          <div style="display: flex; flex-direction: column; justify-content: center; gap: 5px; min-width: 0; flex: 1 1 auto;">
+            <div style="{{ catLabelStyle }}">{{ cat4.name }}</div>
+            <div style="font-size: 13px; color: #7c6f74; text-align: left;">{{ cat4.count }}</div>
+          </div>
+          <img src="uploads/automobile.png" alt="Car names" style="width: 30px; height: 30px; flex: 0 0 auto; object-fit: contain;" />
+        </button>
+        <button onClick="{{ cat5.pick }}" style="{{ catTileStyle }}">
+          <div style="display: flex; flex-direction: column; justify-content: center; gap: 5px; min-width: 0; flex: 1 1 auto;">
+            <div style="{{ catLabelStyle }}">{{ cat5.name }}</div>
+            <div style="font-size: 13px; color: #7c6f74; text-align: left;">{{ cat5.count }}</div>
+          </div>
+          <img src="uploads/tags.png" alt="Brand names" style="width: 30px; height: 30px; flex: 0 0 auto; object-fit: contain;" />
+        </button>
+        <button onClick="{{ cat6.pick }}" style="{{ catTileStyle }}">
+          <div style="display: flex; flex-direction: column; justify-content: center; gap: 5px; min-width: 0; flex: 1 1 auto;">
+            <div style="{{ catLabelStyle }}">{{ cat6.name }}</div>
+            <div style="font-size: 13px; color: #7c6f74; text-align: left;">{{ cat6.count }}</div>
+          </div>
+          <img src="uploads/literature.png" alt="Latin proverbs" style="width: 30px; height: 30px; flex: 0 0 auto; object-fit: contain;" />
+        </button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isLobby }}" hint-placeholder-val="{{ false }}">
+    <div style="width: 100%; max-width: 880px; display: flex; flex-direction: column; gap: 16px;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 14px; align-items: start;">
+
+        <div style="background: #fffdfa; border: 1px solid #e2d8d0; border-radius: 5px; padding: clamp(18px, 4vw, 24px); display: flex; flex-direction: column; gap: 13px;">
+          <div style="font-family: Bitter, Georgia, serif; font-size: 18px; font-weight: 600;">{{ t.soloTitle }}</div>
+          <div style="font-size: 13px; line-height: 1.5; color: #7c6f74; text-wrap: pretty;">{{ t.soloSub }}</div>
+          <input value="{{ soloName }}" onChange="{{ setSoloName }}" onKeyDown="{{ soloKey }}" placeholder="{{ t.yourName }}" style="min-height: 46px; padding: 0 12px; border: 1px solid #ded3ca; border-radius: 5px; background: #fff; color: #241f22;" />
+          <button onClick="{{ startSolo }}" style="min-height: 48px; font-size: 15px; color: #fffdfa; background: #5c2a4e; border: 1px solid #5c2a4e; border-radius: 5px; padding: 0 20px; cursor: pointer;" style-hover="background: #47203c;">{{ t.startMine }}</button>
+        </div>
+
+        <div style="background: #fffdfa; border: 1px solid #e2d8d0; border-radius: 5px; padding: clamp(18px, 4vw, 24px); display: flex; flex-direction: column; gap: 13px;">
+          <div style="font-family: Bitter, Georgia, serif; font-size: 18px; font-weight: 600;">{{ t.passTitle }}</div>
+          <div style="font-size: 13px; line-height: 1.5; color: #7c6f74; text-wrap: pretty;">{{ t.passSub }}</div>
+          <div style="display: flex; gap: 8px;">
+            <input value="{{ nameDraft }}" onChange="{{ setName }}" onKeyDown="{{ nameKey }}" placeholder="{{ t.playerName }}" style="flex: 1 1 auto; min-width: 0; min-height: 46px; padding: 0 12px; border: 1px solid #ded3ca; border-radius: 5px; background: #fff; color: #241f22;" />
+            <button onClick="{{ addPlayer }}" style="min-height: 46px; font-size: 15px; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 5px; padding: 0 16px; cursor: pointer;" style-hover="background: #efe7df;">{{ t.add }}</button>
+          </div>
+          <div style="display: flex; flex-direction: column;">
+            <sc-for list="{{ playerRows }}" as="p" hint-placeholder-count="0">
+              <div style="{{ p.rowStyle }}">
+                <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+                  <div style="{{ p.chipStyle }}">{{ p.initial }}</div>
+                  <div style="font-size: 15px; font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ p.name }}</div>
+                </div>
+                <button onClick="{{ p.remove }}" style="min-height: 40px; font-size: 12px; color: #8a3324; background: transparent; border: 1px solid #e4d2cd; border-radius: 5px; padding: 0 11px; cursor: pointer;" style-hover="background: #f6ece9;">{{ t.remove }}</button>
+              </div>
+            </sc-for>
+          </div>
+          <button onClick="{{ startLocal }}" style="min-height: 48px; font-size: 15px; color: #241f22; background: transparent; border: 1px solid #5c2a4e; border-radius: 5px; padding: 0 20px; cursor: pointer;" style-hover="background: #f4eaf0;">{{ t.startPass }}</button>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px; background: #fffdfa; border: 1px solid #e2d8d0; border-radius: 5px; padding: 16px 18px;">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 9px;">
+          <div style="font-size: 13px; color: #7c6f74; flex: 1 1 200px; text-wrap: pretty;">{{ deckLine }}</div>
+          <button onClick="{{ copyInvite }}" style="min-height: 44px; font-size: 14px; color: #fffdfa; background: #5c2a4e; border: 1px solid #5c2a4e; border-radius: 5px; padding: 0 16px; cursor: pointer;" style-hover="background: #47203c;">{{ t.copyInvite }}</button>
+          <button onClick="{{ copyDeckCode }}" style="min-height: 44px; font-size: 14px; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 5px; padding: 0 16px; cursor: pointer;" style-hover="background: #efe7df;">{{ t.copyDeckCode }}</button>
+          <a href="{{ waInvite }}" target="_blank" rel="noopener" style="min-height: 44px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 500; text-decoration: none; border: 1px solid #cdbfc6; border-radius: 5px; padding: 0 16px;">{{ t.sendWa }}</a>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 9px; border-top: 1px solid #ece3dc; padding-top: 12px;">
+          <input value="{{ deckCodeDraft }}" onChange="{{ setDeckCode }}" placeholder="{{ t.pasteDeck }}" style="flex: 1 1 200px; min-width: 0; min-height: 44px; padding: 0 12px; border: 1px solid #ded3ca; border-radius: 5px; background: #fff; color: #241f22; font-size: 14px;" />
+          <button onClick="{{ loadDeckCode }}" style="min-height: 44px; font-size: 14px; color: #241f22; background: transparent; border: 1px solid #5c2a4e; border-radius: 5px; padding: 0 16px; cursor: pointer;" style-hover="background: #f4eaf0;">{{ t.loadDeck }}</button>
+          <sc-if value="{{ isGuest }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ leaveShared }}" style="min-height: 44px; font-size: 14px; color: #8a3324; background: transparent; border: 1px solid #e4d2cd; border-radius: 5px; padding: 0 14px; cursor: pointer;" style-hover="background: #f6ece9;">{{ t.ownDeck }}</button>
+          </sc-if>
+        </div>
+      </div>
+      <div style="font-size: 13px; color: #5c2a4e; min-height: 18px;">{{ status }}</div>
+      <template id="__bundler_thumbnail" data-bg-color="#5c2a4e"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#5c2a4e"/><g fill="none" stroke="#f7f2ec" stroke-width="4"><rect x="72" y="58" width="56" height="26" rx="3"/><path d="M100 84v16M62 100h76M62 100v16M138 100v16"/><rect x="36" y="116" width="52" height="26" rx="3"/><rect x="112" y="116" width="52" height="26" rx="3"/></g></svg></template>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isStudy }}" hint-placeholder-val="{{ false }}">
+    <div style="width: 100%; max-width: 880px; display: flex; flex-direction: column; gap: 16px;">
+      <div onClick="{{ studyFlip }}" style="{{ studyBoxStyle }}">
+        <div style="{{ studyInnerStyle }}">
+
+          <div style="position: absolute; inset: 0; backface-visibility: hidden; background: #fffdfa; border: 1px solid #e2d8d0; border-radius: 5px; box-shadow: 0 1px 0 #e9e0d8, 0 18px 40px -30px rgba(36,31,34,0.3); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(14px, 3vw, 22px); padding: clamp(22px, 6vw, 48px); text-align: center;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #5c2a4e; border: 1px solid #d9c6d1; border-radius: 999px; padding: 6px 13px;">{{ sCard.origin }}</div>
+            <div style="{{ sLogoStyle }}"></div>
+            <div style="font-family: Bitter, Georgia, serif; font-size: clamp(32px, 9vw, 62px); font-weight: 600; line-height: 1.05; letter-spacing: -0.02em; text-wrap: balance;">{{ sCard.word }}</div>
+            <div style="{{ sAncestorStyle }}">
+              <div style="font-family: Bitter, Georgia, serif; font-size: clamp(17px, 5vw, 24px); font-weight: 600; color: #241f22; text-wrap: balance;">{{ sCard.source.form }}</div>
+              <div style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">{{ sCard.source.lang }}</div>
+            </div>
+            <div style="font-family: Bitter, Georgia, serif; font-style: italic; font-size: clamp(15px, 4vw, 20px); color: #7c6f74;">{{ sCard.ipa }}</div>
+            <div style="width: 44px; height: 1px; background: #e2d8d0;"></div>
+            <div style="font-size: 13px; color: #a0928f; letter-spacing: 0.04em;">{{ t.tapReveal }}</div>
+          </div>
+
+          <div style="position: absolute; inset: 0; backface-visibility: hidden; transform: rotateY(180deg); background: #fffdfa; border: 1px solid #e2d8d0; border-radius: 5px; box-shadow: 0 1px 0 #e9e0d8, 0 18px 40px -30px rgba(36,31,34,0.3); padding: clamp(18px, 5vw, 34px); display: flex; flex-direction: column; gap: 13px; overflow: auto;">
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <div style="display: flex; flex-direction: column; align-items: center; border: 1px solid #cfc4bb; background: #f1eae2; border-radius: 5px; padding: 10px 20px; text-align: center;">
+                <div style="font-family: Bitter, Georgia, serif; font-size: clamp(17px, 5vw, 24px); font-weight: 600; color: #241f22;">{{ sCard.source.form }}</div>
+                <div style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82; margin-top: 3px;">{{ sCard.source.lang }}</div>
+              </div>
+              <div style="width: 1px; height: 15px; background: #d5c9c2;"></div>
+              <div style="{{ sBarStyle }}"></div>
+              <div style="{{ sTreeRowStyle }}">
+                <sc-for list="{{ sTreeParts }}" as="part" hint-placeholder-count="2">
+                  <div style="{{ part.colStyle }}">
+                    <div style="{{ part.stemStyle }}"></div>
+                    <div style="{{ part.cardStyle }}">
+                      <div style="{{ part.formStyle }}">{{ part.form }}</div>
+                      <div style="font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #8b7d82;">{{ part.lang }}</div>
+                      <div style="font-family: Bitter, Georgia, serif; font-style: italic; font-size: 14px; color: #3f3639; text-wrap: pretty;">{{ part.gloss }}</div>
+                    </div>
+                    <sc-if value="{{ part.hasWords }}" hint-placeholder-val="{{ true }}">
+                      <div style="{{ part.wordsBoxStyle }}">
+                        <div style="{{ part.wordsLabelStyle }}">{{ part.wordsLabel }}</div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 5px; justify-content: center;">
+                          <sc-for list="{{ part.words }}" as="rw" hint-placeholder-count="2">
+                            <div style="{{ part.chipStyle }}">{{ rw }}</div>
+                          </sc-for>
+                          <div style="{{ part.noWordsStyle }}">{{ part.noWords }}</div>
+                        </div>
+                      </div>
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: baseline; gap: 11px; border-top: 1px solid #ece3dc; border-bottom: 1px solid #ece3dc; padding: 12px 0; flex-wrap: wrap;">
+              <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">{{ t.literally }}</div>
+              <div style="font-family: Bitter, Georgia, serif; font-size: clamp(16px, 4.5vw, 20px); font-weight: 600; color: #5c2a4e; text-wrap: pretty;">{{ sCard.literal }}</div>
+            </div>
+
+            <div style="font-size: 14px; line-height: 1.55; color: #3f3639; text-wrap: pretty;">{{ sCard.def }}</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+              <sc-for list="{{ sSpareWords }}" as="rel" hint-placeholder-count="0">
+                <div style="font-size: 12px; color: #3f3639; background: #f4eee7; border: 1px solid #e6ddd5; border-radius: 999px; padding: 4px 10px;">{{ rel }}</div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
+        <button onClick="{{ studyPrev }}" style="min-height: 46px; font-size: 14px; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 5px; padding: 0 18px; cursor: pointer;" style-hover="background: #efe7df;">{{ t.prev }}</button>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; flex: 1 1 auto;">
+          <sc-for list="{{ studyDots }}" as="dot" hint-placeholder-count="12">
+            <div onClick="{{ dot.go }}" style="{{ dot.style }}"></div>
+          </sc-for>
+        </div>
+        <button onClick="{{ studyNext }}" style="min-height: 46px; font-size: 14px; color: #fffdfa; background: #5c2a4e; border: 1px solid #5c2a4e; border-radius: 5px; padding: 0 18px; cursor: pointer;" style-hover="background: #47203c;">{{ t.nextWord }}</button>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
+        <div></div>
+        <div style="font-size: 12px; color: #a0928f;">{{ t.keysHint }}</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isPlay }}" hint-placeholder-val="{{ false }}">
+    <div style="width: 100%; max-width: 880px; display: flex; flex-direction: column; gap: 16px;">
+
+      <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <sc-for list="{{ scoreChips }}" as="s" hint-placeholder-count="1">
+          <div style="{{ s.style }}">
+            <div style="font-size: 14px; font-weight: 500;">{{ s.name }}</div>
+            <div style="font-family: Bitter, Georgia, serif; font-size: 16px; font-weight: 700;">{{ s.score }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="background: #fffdfa; border: 1px solid #e2d8d0; border-radius: 5px; box-shadow: 0 1px 0 #e9e0d8, 0 18px 40px -30px rgba(36,31,34,0.3); padding: clamp(20px, 5vw, 32px); display: flex; flex-direction: column; gap: clamp(18px, 4vw, 24px);">
+
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="{{ turnChipStyle }}">{{ turnInitial }}</div>
+            <div style="display: flex; flex-direction: column;">
+              <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">{{ turnLabel }}</div>
+              <div style="font-size: 16px; font-weight: 600;">{{ turnName }}</div>
+            </div>
+          </div>
+          <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #5c2a4e; border: 1px solid #d9c6d1; border-radius: 999px; padding: 6px 13px;">{{ card.origin }}</div>
+        </div>
+
+        <div style="display: flex; flex-direction: column;">
+          <div style="font-size: 13px; color: #7c6f74; margin-bottom: 7px; text-wrap: pretty;">{{ prompt }}</div>
+          <div style="{{ headlineStyle }}">{{ headline }}</div>
+          <div style="font-family: Bitter, Georgia, serif; font-style: italic; font-size: 16px; color: #7c6f74; margin-top: 6px; text-wrap: pretty;">{{ subline }}</div>
+        </div>
+
+        <div style="display: grid; gap: 9px;">
+          <sc-for list="{{ options }}" as="o" hint-placeholder-count="3">
+            <button onClick="{{ o.pick }}" style="{{ o.style }}">
+              <div style="{{ o.letterStyle }}">{{ o.letter }}</div>
+              <div style="font-family: Bitter, Georgia, serif; font-size: clamp(16px, 4vw, 18px); font-weight: 600; text-align: left; text-wrap: pretty;">{{ o.label }}</div>
+              <div style="{{ o.markStyle }}">{{ o.mark }}</div>
+            </button>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ answered }}" hint-placeholder-val="{{ false }}">
+          <div style="{{ revealStyle }}">
+            <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;">
+              <div style="font-family: Bitter, Georgia, serif; font-size: 18px; font-weight: 700; color: #5c2a4e;">{{ verdict }}</div>
+              <div style="font-size: 14px; color: #3f3639;">{{ verdictNote }}</div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; align-items: center; margin-top: 2px;">
+              <div style="{{ logoStyle }}"></div>
+              <div style="display: flex; flex-direction: column; align-items: center; border: 1px solid #cfc4bb; background: #f1eae2; border-radius: 5px; padding: 10px 20px; text-align: center;">
+                <div style="font-family: Bitter, Georgia, serif; font-size: clamp(17px, 5vw, 22px); font-weight: 600; color: #241f22;">{{ card.source.form }}</div>
+                <div style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82; margin-top: 3px;">{{ card.source.lang }}</div>
+              </div>
+              <div style="width: 1px; height: 14px; background: #d5c9c2;"></div>
+              <div style="{{ barStyle }}"></div>
+              <div style="{{ treeRowStyle }}">
+                <sc-for list="{{ treeParts }}" as="part" hint-placeholder-count="2">
+                  <div style="{{ part.colStyle }}">
+                    <div style="{{ part.stemStyle }}"></div>
+                    <div style="{{ part.cardStyle }}">
+                      <div style="{{ part.formStyle }}">{{ part.form }}</div>
+                      <div style="font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #8b7d82;">{{ part.lang }}</div>
+                      <div style="font-family: Bitter, Georgia, serif; font-style: italic; font-size: 14px; color: #3f3639; text-wrap: pretty;">{{ part.gloss }}</div>
+                    </div>
+                    <sc-if value="{{ part.hasWords }}" hint-placeholder-val="{{ true }}">
+                      <div style="{{ part.wordsBoxStyle }}">
+                        <div style="{{ part.wordsLabelStyle }}">{{ part.wordsLabel }}</div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 5px; justify-content: center;">
+                          <sc-for list="{{ part.words }}" as="rw" hint-placeholder-count="2">
+                            <div style="{{ part.chipStyle }}">{{ rw }}</div>
+                          </sc-for>
+                          <div style="{{ part.noWordsStyle }}">{{ part.noWords }}</div>
+                        </div>
+                      </div>
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: baseline; gap: 11px; border-top: 1px solid #ece3dc; border-bottom: 1px solid #ece3dc; padding: 12px 0; flex-wrap: wrap;">
+              <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">{{ t.literally }}</div>
+              <div style="font-family: Bitter, Georgia, serif; font-size: clamp(16px, 4.5vw, 20px); font-weight: 600; color: #5c2a4e; text-wrap: pretty;">{{ card.literal }}</div>
+            </div>
+
+            <div style="font-size: 14px; line-height: 1.55; color: #3f3639; text-wrap: pretty;">{{ card.def }}</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+              <sc-for list="{{ spareWords }}" as="rel" hint-placeholder-count="0">
+                <div style="font-size: 12px; color: #3f3639; background: #f4eee7; border: 1px solid #e6ddd5; border-radius: 999px; padding: 4px 10px;">{{ rel }}</div>
+              </sc-for>
+            </div>
+
+            <button onClick="{{ nextCard }}" style="align-self: stretch; min-height: 50px; font-size: 15px; color: #fffdfa; background: #5c2a4e; border: 1px solid #5c2a4e; border-radius: 5px; padding: 0 20px; cursor: pointer; margin-top: 2px;" style-hover="background: #47203c;">{{ nextLabel }}</button>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isResults }}" hint-placeholder-val="{{ false }}">
+    <div style="width: 100%; max-width: 620px; display: flex; flex-direction: column; gap: 20px; background: #fffdfa; border: 1px solid #e2d8d0; border-radius: 5px; padding: clamp(22px, 5vw, 34px);">
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #8b7d82;">{{ resultsKicker }}</div>
+        <div style="font-family: Bitter, Georgia, serif; font-size: clamp(25px, 7vw, 33px); font-weight: 700; letter-spacing: -0.01em; text-wrap: balance;">{{ winnerLine }}</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column;">
+        <sc-for list="{{ standings }}" as="s" hint-placeholder-count="1">
+          <div style="{{ s.rowStyle }}">
+            <div style="display: flex; align-items: center; gap: 11px; min-width: 0;">
+              <div style="font-family: Bitter, Georgia, serif; font-size: 15px; color: #8b7d82; width: 20px;">{{ s.rank }}</div>
+              <div style="{{ s.chipStyle }}">{{ s.initial }}</div>
+              <div style="font-size: 16px; font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ s.name }}</div>
+            </div>
+            <div style="font-family: Bitter, Georgia, serif; font-size: 19px; font-weight: 700;">{{ s.score }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ wasSolo }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 11px; background: #f9f3f6; border: 1px solid #e8dbe2; border-radius: 5px; padding: 16px 18px;">
+          <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">{{ t.resultCode }}</div>
+          <div style="font-family: Bitter, Georgia, serif; font-size: 15px; word-break: break-all; color: #3f3639; background: #fff; border: 1px solid #e2d8d0; border-radius: 5px; padding: 11px 12px;">{{ resultCode }}</div>
+          <div style="font-size: 13px; line-height: 1.5; color: #7c6f74; text-wrap: pretty;">{{ t.resultHint }}</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            <button onClick="{{ copyResult }}" style="min-height: 46px; font-size: 14px; color: #fffdfa; background: #5c2a4e; border: 1px solid #5c2a4e; border-radius: 5px; padding: 0 16px; cursor: pointer;" style-hover="background: #47203c;">{{ t.copyResult }}</button>
+            <a href="{{ waResult }}" target="_blank" rel="noopener" style="min-height: 46px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 500; text-decoration: none; border: 1px solid #cdbfc6; border-radius: 5px; padding: 0 16px;">{{ t.shareWa }}</a>
+          </div>
+        </div>
+      </sc-if>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <button onClick="{{ playAgain }}" style="min-height: 48px; font-size: 15px; color: #241f22; background: transparent; border: 1px solid #5c2a4e; border-radius: 5px; padding: 0 18px; cursor: pointer;" style-hover="background: #f4eaf0;">{{ t.playAgain }}</button>
+        <button onClick="{{ goScores }}" style="min-height: 48px; font-size: 15px; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 5px; padding: 0 18px; cursor: pointer;" style-hover="background: #efe7df;">{{ t.leaderboard }}</button>
+      </div>
+      <div style="font-size: 13px; color: #5c2a4e; min-height: 18px;">{{ status }}</div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isScores }}" hint-placeholder-val="{{ false }}">
+    <div style="width: 100%; max-width: 660px; display: flex; flex-direction: column; gap: 16px;">
+      <div style="background: #fffdfa; border: 1px solid #e2d8d0; border-radius: 5px; padding: clamp(20px, 5vw, 28px); display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; flex-direction: column; gap: 5px;">
+          <div style="font-family: Bitter, Georgia, serif; font-size: 20px; font-weight: 600;">{{ t.groupBoard }}</div>
+          <div style="font-size: 13px; line-height: 1.5; color: #7c6f74; text-wrap: pretty;">{{ t.boardHint }}</div>
+        </div>
+        <textarea value="{{ pasteDraft }}" onChange="{{ setPaste }}" rows="4" placeholder="WR1.eyJuIjoi…" style="padding: 11px 12px; border: 1px solid #ded3ca; border-radius: 5px; background: #fff; color: #241f22; resize: vertical; font-size: 14px; line-height: 1.5;"></textarea>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+          <button onClick="{{ addResults }}" style="min-height: 46px; font-size: 14px; color: #fffdfa; background: #5c2a4e; border: 1px solid #5c2a4e; border-radius: 5px; padding: 0 18px; cursor: pointer;" style-hover="background: #47203c;">{{ t.addBoard }}</button>
+          <button onClick="{{ clearBoard }}" style="min-height: 46px; font-size: 14px; color: #8a3324; background: transparent; border: 1px solid #e4d2cd; border-radius: 5px; padding: 0 16px; cursor: pointer;" style-hover="background: #f6ece9;">{{ t.clearBoard }}</button>
+          <div style="font-size: 13px; color: #5c2a4e;">{{ status }}</div>
+        </div>
+      </div>
+
+      <div style="background: #fffdfa; border: 1px solid #e2d8d0; border-radius: 5px; padding: clamp(20px, 5vw, 28px); display: flex; flex-direction: column; gap: 13px;">
+        <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+          <div style="font-family: Bitter, Georgia, serif; font-size: 18px; font-weight: 600;">{{ boardTitle }}</div>
+          <div style="font-size: 12px; color: #7c6f74;">{{ boardNote }}</div>
+        </div>
+        <div style="display: flex; flex-direction: column;">
+          <sc-for list="{{ board }}" as="b" hint-placeholder-count="0">
+            <div style="{{ b.rowStyle }}">
+              <div style="display: flex; align-items: center; gap: 11px; min-width: 0;">
+                <div style="font-family: Bitter, Georgia, serif; font-size: 15px; color: #8b7d82; width: 20px;">{{ b.rank }}</div>
+                <div style="{{ b.chipStyle }}">{{ b.initial }}</div>
+                <div style="display: flex; flex-direction: column; min-width: 0;">
+                  <div style="font-size: 16px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ b.name }}</div>
+                  <div style="{{ b.flagStyle }}">{{ t.diffDeck }}</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px; flex: 0 0 auto;">
+                <div style="font-family: Bitter, Georgia, serif; font-size: 19px; font-weight: 700;">{{ b.score }}</div>
+                <button onClick="{{ b.remove }}" style="min-height: 38px; font-size: 12px; color: #8a3324; background: transparent; border: 1px solid #e4d2cd; border-radius: 5px; padding: 0 10px; cursor: pointer;" style-hover="background: #f6ece9;">✕</button>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <button onClick="{{ copyBoard }}" style="min-height: 44px; font-size: 14px; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 5px; padding: 0 16px; cursor: pointer;" style-hover="background: #efe7df;">{{ t.copyStandings }}</button>
+          <a href="{{ waBoard }}" target="_blank" rel="noopener" style="min-height: 44px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 500; text-decoration: none; border: 1px solid #cdbfc6; border-radius: 5px; padding: 0 16px;">{{ t.postWa }}</a>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
+    <div style="width: 100%; max-width: 880px; display: flex; flex-direction: column; gap: 24px;">
+
+      <div style="display: flex; flex-direction: column; gap: 13px; background: #fffdfa; border: 1px solid #e2d8d0; border-radius: 5px; padding: clamp(18px, 4vw, 26px);">
+        <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+          <div style="font-family: Bitter, Georgia, serif; font-size: 18px; font-weight: 600;">{{ adminDeckTitle }}</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 7px;">
+            <button onClick="{{ selectAll }}" style="min-height: 42px; font-size: 13px; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 5px; padding: 0 13px; cursor: pointer;" style-hover="background: #efe7df;">{{ t.selectAll }}</button>
+            <button onClick="{{ selectNone }}" style="min-height: 42px; font-size: 13px; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 5px; padding: 0 13px; cursor: pointer;" style-hover="background: #efe7df;">{{ t.clear }}</button>
+            <button onClick="{{ reshuffle }}" style="min-height: 42px; font-size: 13px; color: #fffdfa; background: #5c2a4e; border: 1px solid #5c2a4e; border-radius: 5px; padding: 0 13px; cursor: pointer;" style-hover="background: #47203c;">{{ t.reshuffle }}</button>
+          </div>
+        </div>
+        <div style="font-size: 13px; line-height: 1.5; color: #7c6f74; text-wrap: pretty;">{{ t.adminHint }}</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+          <button onClick="{{ copyInvite }}" style="min-height: 44px; font-size: 14px; color: #fffdfa; background: #5c2a4e; border: 1px solid #5c2a4e; border-radius: 5px; padding: 0 16px; cursor: pointer;" style-hover="background: #47203c;">{{ t.copyInvite }}</button>
+          <button onClick="{{ copyDeckCode }}" style="min-height: 44px; font-size: 14px; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 5px; padding: 0 16px; cursor: pointer;" style-hover="background: #efe7df;">{{ t.copyDeckCode }}</button>
+          <div style="font-size: 13px; color: #5c2a4e;">{{ status }}</div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap: 8px;">
+          <sc-for list="{{ deckRows }}" as="r" hint-placeholder-count="6">
+            <div onClick="{{ r.toggle }}" style="{{ r.style }}">
+              <div style="{{ r.boxStyle }}">{{ r.tick }}</div>
+              <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1 1 auto;">
+                <div style="display: flex; align-items: baseline; gap: 7px; flex-wrap: wrap;">
+                  <div style="font-family: Bitter, Georgia, serif; font-size: 16px; font-weight: 600;">{{ r.word }}</div>
+                  <div style="{{ r.badgeStyle }}">{{ r.badge }}</div>
+                </div>
+                <div style="font-family: Bitter, Georgia, serif; font-style: italic; font-size: 13px; color: #7c6f74; text-wrap: pretty;">{{ r.literal }}</div>
+              </div>
+              <div style="display: flex; gap: 6px; flex: 0 0 auto;">
+                <button onClick="{{ r.edit }}" style="min-height: 40px; font-size: 12px; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 5px; padding: 0 10px; cursor: pointer;" style-hover="background: #efe7df;">{{ t.editBtn }}</button>
+                <sc-if value="{{ r.removable }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ r.remove }}" style="min-height: 40px; font-size: 12px; color: #8a3324; background: transparent; border: 1px solid #e4d2cd; border-radius: 5px; padding: 0 10px; cursor: pointer;" style-hover="background: #f6ece9;">{{ t.remove }}</button>
+                </sc-if>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 16px; background: #fffdfa; border: 1px solid #e2d8d0; border-radius: 5px; padding: clamp(18px, 4vw, 26px);">
+        <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
+          <div style="font-family: Bitter, Georgia, serif; font-size: 18px; font-weight: 600;">{{ formTitle }}</div>
+          <div style="font-size: 12px; color: #7c6f74;">{{ t.savedHere }}</div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px; background: #f9f3f6; border: 1px solid #e8dbe2; border-radius: 5px; padding: 15px 16px;">
+          <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">{{ t.research }}</div>
+          <div style="display: flex; gap: 9px; flex-wrap: wrap; align-items: center;">
+            <input value="{{ draft.word }}" onChange="{{ h.word }}" placeholder="{{ t.fWord }}" style="flex: 1 1 200px; min-width: 0; min-height: 46px; padding: 0 12px; border: 1px solid #ded3ca; border-radius: 5px; background: #fff; color: #241f22;" />
+            <a href="{{ lookupUrl }}" target="_blank" rel="noopener" style="min-height: 46px; display: inline-flex; align-items: center; font-size: 13px; font-weight: 500; text-decoration: none; border: 1px solid #cdbfc6; border-radius: 5px; padding: 0 14px;">{{ t.lookup }}</a>
+          </div>
+          <div style="font-size: 12px; line-height: 1.5; color: #7c6f74; text-wrap: pretty;">{{ t.lookupHint }}</div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 175px), 1fr)); gap: 12px;">
+          <div style="display: flex; flex-direction: column; gap: 5px; min-width: 0;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">{{ t.fIpa }}</div>
+            <input value="{{ draft.ipa }}" onChange="{{ h.ipa }}" style="min-height: 44px; padding: 0 12px; border: 1px solid #ded3ca; border-radius: 5px; background: #fff; color: #241f22;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px; min-width: 0;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">{{ t.fOrigin }}</div>
+            <input value="{{ draft.origin }}" onChange="{{ h.origin }}" style="min-height: 44px; padding: 0 12px; border: 1px solid #ded3ca; border-radius: 5px; background: #fff; color: #241f22;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px; min-width: 0;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">{{ t.fSrcForm }}</div>
+            <input value="{{ draft.srcForm }}" onChange="{{ h.srcForm }}" style="min-height: 44px; padding: 0 12px; border: 1px solid #ded3ca; border-radius: 5px; background: #fff; color: #241f22;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px; min-width: 0;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">{{ t.fSrcLang }}</div>
+            <input value="{{ draft.srcLang }}" onChange="{{ h.srcLang }}" style="min-height: 44px; padding: 0 12px; border: 1px solid #ded3ca; border-radius: 5px; background: #fff; color: #241f22;" />
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">{{ t.fParts }}</div>
+            <button onClick="{{ addPart }}" style="min-height: 40px; font-size: 13px; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 5px; padding: 0 13px; cursor: pointer;" style-hover="background: #efe7df;">{{ t.addPart }}</button>
+          </div>
+          <sc-for list="{{ partRows }}" as="row" hint-placeholder-count="2">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 110px), 1fr)); gap: 8px; align-items: center;">
+              <input value="{{ row.form }}" onChange="{{ row.hForm }}" style="min-width: 0; min-height: 44px; padding: 0 12px; border: 1px solid #ded3ca; border-radius: 5px; background: #fff; color: #241f22;" />
+              <input value="{{ row.lang }}" onChange="{{ row.hLang }}" style="min-width: 0; min-height: 44px; padding: 0 12px; border: 1px solid #ded3ca; border-radius: 5px; background: #fff; color: #241f22;" />
+              <input value="{{ row.gloss }}" onChange="{{ row.hGloss }}" style="min-width: 0; min-height: 44px; padding: 0 12px; border: 1px solid #ded3ca; border-radius: 5px; background: #fff; color: #241f22;" />
+              <button onClick="{{ row.remove }}" style="min-height: 44px; font-size: 13px; color: #8a3324; background: transparent; border: 1px solid #e4d2cd; border-radius: 5px; padding: 0 12px; cursor: pointer;" style-hover="background: #f6ece9;">{{ t.remove }}</button>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">{{ t.fLiteral }}</div>
+            <input value="{{ draft.literal }}" onChange="{{ h.literal }}" style="min-height: 44px; padding: 0 12px; border: 1px solid #ded3ca; border-radius: 5px; background: #fff; color: #241f22;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">{{ t.fDef }}</div>
+            <textarea value="{{ draft.def }}" onChange="{{ h.def }}" rows="2" style="font-size: 14px; line-height: 1.5; padding: 10px 12px; border: 1px solid #ded3ca; border-radius: 5px; background: #fff; color: #241f22; resize: vertical;"></textarea>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">{{ t.fRelated }}</div>
+            <input value="{{ draft.related }}" onChange="{{ h.related }}" style="min-height: 44px; padding: 0 12px; border: 1px solid #ded3ca; border-radius: 5px; background: #fff; color: #241f22;" />
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; border-top: 1px solid #ece3dc; padding-top: 14px;">
+          <button onClick="{{ save }}" style="min-height: 46px; font-size: 14px; color: #fffdfa; background: #5c2a4e; border: 1px solid #5c2a4e; border-radius: 5px; padding: 0 20px; cursor: pointer;" style-hover="background: #47203c;">{{ saveLabel }}</button>
+          <button onClick="{{ clearDraft }}" style="min-height: 46px; font-size: 14px; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 5px; padding: 0 16px; cursor: pointer;" style-hover="background: #efe7df;">{{ t.clearForm }}</button>
+          <button onClick="{{ resetAll }}" style="min-height: 46px; font-size: 14px; color: #8a3324; background: transparent; border: 1px solid #e4d2cd; border-radius: 5px; padding: 0 14px; cursor: pointer;" style-hover="background: #f6ece9;">{{ t.resetMine }}</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:880},&quot;quizMode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;meaning&quot;,&quot;word&quot;],&quot;default&quot;:&quot;meaning&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Game&quot;}}">
+const K = { custom: "wordroots.custom.v2", ovr: "wordroots.overrides.v2", sel: "wordroots.selected.v2",
+  order: "wordroots.order.v2", players: "wordroots.players.v2", board: "wordroots.board.v2", me: "wordroots.me.v2" };
+const EMPTY = { word: "", ipa: "", origin: "", srcForm: "", srcLang: "", literal: "", def: "", related: "",
+  parts: [ { form: "", lang: "", gloss: "" }, { form: "", lang: "", gloss: "" } ] };
+const HUES = ["#5c2a4e", "#1f4b43", "#8a3324", "#3b3a8f", "#7a5c1e", "#4a4f55"];
+const FALLBACK = { O: {}, CATS: [{ id: "random", n: "Mixed words" }], WORDS: { random: [] },
+  LANGS: [{ id: "en", native: "English" }], T: {} };
+
+function D() { return (typeof window !== "undefined" && window.WR_DATA) || FALLBACK; }
+function pick(s, li) { if (typeof s !== "string") return ""; const a = s.split("|"); return a[li] !== undefined && a[li] !== "" ? a[li] : a[0]; }
+function load(k, fb) { try { const v = JSON.parse(localStorage.getItem(k) || "null"); return v === null ? fb : v; } catch (e) { return fb; } }
+function put(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+function shuffle(a) { const r = a.slice(); for (let i = r.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = r[i]; r[i] = r[j]; r[j] = t; } return r; }
+function b64e(s) { return btoa(String.fromCharCode.apply(null, Array.from(new TextEncoder().encode(s)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); }
+function b64d(s) { const t = s.replace(/-/g, "+").replace(/_/g, "/");
+  const bin = atob(t + "===".slice((t.length + 3) % 4)); const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes); }
+function hash(s) { let h = 5381; for (let i = 0; i < s.length; i++) h = ((h * 33) ^ s.charCodeAt(i)) >>> 0; return h.toString(36); }
+
+const BRANCH = [
+  { ink: "#5c2a4e", tint: "#f7edf3", edge: "#dfc8d6" },
+  { ink: "#7a5c1e", tint: "#f8f1e2", edge: "#e2d3b3" },
+  { ink: "#2b4a6f", tint: "#eaf0f6", edge: "#c6d5e4" }
+];
+
+// Greek and Latin spellings of the same root diverge (déka/deca, phageîn/-phagus),
+// so roots and words are compared on a rough shared skeleton rather than letter by letter.
+function bare(s) {
+  return String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase().replace(/[^a-z]/g, "")
+    .replace(/ph/g, "f").replace(/kh/g, "c").replace(/k/g, "c")
+    .replace(/ae|oe/g, "e").replace(/y/g, "i").replace(/(.)\1/g, "$1");
+}
+// Root variants: "sárx, sark-" → ["sarx", "sark"]; used to match words against a root.
+function variants(form) {
+  return String(form || "").split(/[,/]/).map(bare).filter(v => v.length > 1);
+}
+function rootScore(word, form) {
+  const w = bare(word);
+  let best = 0;
+  variants(form).forEach(v => {
+    for (let len = Math.min(v.length, 6); len >= 3; len--) {
+      if (w.indexOf(v.slice(0, len)) !== -1) { best = Math.max(best, len); break; }
+    }
+  });
+  return best;
+}
+// Words shown under each branch: the card's own related list, assigned to whichever
+// root it actually shares, plus other cards in the deck built on the same root.
+function splitByRoot(card, deck) {
+  const parts = card.parts || [];
+  const buckets = parts.map(() => []);
+  const spare = [];
+  (card.related || []).forEach(rel => {
+    let bi = -1, top = 0;
+    parts.forEach((p, i) => { const sc = rootScore(rel, p.form); if (sc > top) { top = sc; bi = i; } });
+    if (bi === -1) spare.push(rel); else buckets[bi].push(rel);
+  });
+  (deck || []).forEach(other => {
+    if (!other || other.word === card.word) return;
+    parts.forEach((p, i) => {
+      if (buckets[i].length >= 5) return;
+      const shares = (other.parts || []).some(op => bare(op.form) && bare(op.form) === bare(p.form));
+      if (shares && buckets[i].indexOf(other.word) === -1) buckets[i].push(other.word);
+    });
+  });
+  return { buckets: buckets, spare: spare };
+}
+
+// Source forms arrive as "δέκαθλον · dékathlon". The readable romanisation leads and the
+// original script sits under it, so a reader who knows no Greek is not blocked at line one.
+function splitScript(form) {
+  const parts = String(form || "").split("·").map(p => p.trim()).filter(Boolean);
+  const nonLatin = (t) => /[^\u0000-\u024F\u1E00-\u1EFF\s\u2000-\u206F.,'()\-]/.test(t);
+  if (parts.length < 2) return { main: parts[0] || "", script: "" };
+  const script = parts.filter(nonLatin), latin = parts.filter(p => !nonLatin(p));
+  if (!script.length || !latin.length) return { main: parts.join(" · "), script: "" };
+  return { main: latin.join(" · "), script: script.join(" · ") };
+}
+
+// A missing logo file paints nothing: no request for a literal URL, no broken-image icon.
+function logoBox(src, size, margin) {
+  if (!src) return { display: "none" };
+  return { width: size, height: size, margin: margin, flex: "0 0 auto",
+    backgroundImage: 'url("' + src + '")', backgroundSize: "contain",
+    backgroundRepeat: "no-repeat", backgroundPosition: "center" };
+}
+
+function materialize(c, li) {
+  const O = D().O;
+  const lang = (key) => pick(O[key] || key || "", li);
+  return { word: pick(c.w, li), ipa: c.i || "", origin: lang(c.o),
+    source: { form: c.sf, lang: lang(c.sl || c.o) },
+    parts: (c.p || []).map(p => ({ form: p.f, lang: lang(p.o || c.o), gloss: pick(p.g, li) })),
+    literal: pick(c.l, li), def: pick(c.d, li), related: c.r || [],
+    logo: c.lg ? "uploads/car-logos/" + c.lg : "" };
+}
+function toCard(d) {
+  return { word: d.word.trim(), ipa: d.ipa.trim(), origin: d.origin.trim() || "—",
+    source: { form: d.srcForm.trim() || d.word.trim(), lang: d.srcLang.trim() || d.origin.trim() || "—" },
+    parts: d.parts.filter(p => p.form.trim() || p.gloss.trim()).map(p => ({ form: p.form.trim(), lang: p.lang.trim(), gloss: p.gloss.trim() })),
+    literal: d.literal.trim() || "—", def: d.def.trim(),
+    related: d.related.split(",").map(s => s.trim()).filter(Boolean), custom: true };
+}
+function toDraft(c) {
+  return { word: c.word || "", ipa: c.ipa || "", origin: c.origin || "", srcForm: (c.source && c.source.form) || "",
+    srcLang: (c.source && c.source.lang) || "", literal: c.literal || "", def: c.def || "",
+    related: (c.related || []).join(", "),
+    parts: (c.parts && c.parts.length ? c.parts : EMPTY.parts).map(p => ({ form: p.form || "", lang: p.lang || "", gloss: p.gloss || "" })) };
+}
+
+class Component extends DCLogic {
+  state = { view: "lang", li: 0, cat: "random", mode: "game", shared: null,
+    custom: {}, overrides: {}, selected: {}, order: {}, players: [], board: [],
+    soloName: "", nameDraft: "", deckCodeDraft: "", pasteDraft: "",
+    pos: 0, turn: 0, answered: null, studyPos: 0, flipped: false,
+    draft: JSON.parse(JSON.stringify(EMPTY)), editing: null, status: "", lastResult: null,
+    rating: 0, fbNote: "", sugCat: "", sugWords: "", sugWhy: "", prevView: "lang", isAdminUser: false, vw: 900 };
+
+  componentDidMount() {
+    if (!window.WR_DATA) {
+      this._poll = setInterval(() => { if (window.WR_DATA) { clearInterval(this._poll); this.forceUpdate(); } }, 60);
+    }
+    this._resize = () => { const w = window.innerWidth || 900;
+      if (Math.abs(w - this.state.vw) > 24) this.setState({ vw: w }); };
+    this._resize();
+    window.addEventListener("resize", this._resize);
+    this._key = (e) => {
+      if (this.state.view !== "study") return;
+      const tag = e.target && e.target.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA") return;
+      if (e.key === " ") { e.preventDefault(); this.studyFlip(); }
+      else if (e.key === "ArrowRight") this.studyStep(1);
+      else if (e.key === "ArrowLeft") this.studyStep(-1);
+    };
+    window.addEventListener("keydown", this._key);
+
+    // Admin unlocks by opening the app once with #admin in the URL; the flag then sticks to this device.
+    let isAdminUser = load("wordroots.admin.v1", false);
+    if (/(^|[#&?])admin(=1)?\b/.test(location.hash) || /[?&]admin=1/.test(location.search)) {
+      isAdminUser = true; put("wordroots.admin.v1", true);
+    }
+    if (/(^|[#&?])admin=0\b/.test(location.hash)) { isAdminUser = false; put("wordroots.admin.v1", false); }
+
+    let shared = null, li = 0, cat = "random", view = "lang";
+    try {
+      const m = (location.hash || "").match(/d=([A-Za-z0-9\-_]+)/);
+      if (m) {
+        const p = JSON.parse(b64d(m[1]));
+        if (p && p.cards && p.cards.length) { shared = p; li = p.li || 0; cat = p.cat || "random"; view = "mode"; }
+      }
+    } catch (e) { console.warn("Shared deck link could not be read", e); }
+
+    this.setState({ view, li, cat, shared, isAdminUser,
+      custom: load(K.custom, {}), overrides: load(K.ovr, {}), selected: load(K.sel, {}),
+      order: load(K.order, {}), players: load(K.players, []), board: load(K.board, []),
+      soloName: load(K.me, "") });
+  }
+  componentWillUnmount() { window.removeEventListener("keydown", this._key);
+    window.removeEventListener("resize", this._resize); if (this._poll) clearInterval(this._poll); }
+
+  openPanel = (which) => this.setState(s => ({
+    prevView: (s.view === "feedback" || s.view === "suggest") ? s.prevView : s.view, view: which, status: "" }));
+
+  copyFeedback = () => {
+    if (!this.state.rating) { this.setState({ status: this.tr("needStars") }); return; }
+    const lines = ["Word Roots — feedback", "Rating: " + this.state.rating + "/5"];
+    if (this.state.fbNote.trim()) lines.push(this.state.fbNote.trim());
+    put("wordroots.rating.v1", { rating: this.state.rating, note: this.state.fbNote });
+    this.copy(lines.join("\n"), this.tr("feedbackCopied"));
+  };
+
+  copySuggestion = () => {
+    const c = this.state.sugCat.trim(), w = this.state.sugWords.trim(), y = this.state.sugWhy.trim();
+    if (!c && !w) { this.setState({ status: this.tr("needSuggestion") }); return; }
+    const lines = ["Word Roots — suggestion"];
+    if (c) lines.push("New category: " + c);
+    if (w) lines.push("Words: " + w);
+    if (y) lines.push("Note: " + y);
+    this.copy(lines.join("\n"), this.tr("suggestionCopied"));
+  };
+
+  tr = (key) => pick((D().T || {})[key] || "", this.state.li);
+  key = () => this.state.li + "|" + this.state.cat;
+
+  catCards() {
+    const li = this.state.li;
+    const base = (D().WORDS[this.state.cat] || []).map(c => materialize(c, li));
+    const ov = this.state.overrides[this.key()] || {};
+    const withOv = base.map(c => ov[c.word] ? Object.assign({}, ov[c.word], { custom: false, edited: true }) : c);
+    return withOv.concat(this.state.custom[this.key()] || []);
+  }
+  selectedWords() {
+    const all = this.catCards().map(c => c.word);
+    const sel = this.state.selected[this.key()];
+    return !sel ? all : all.filter(w => sel.indexOf(w) !== -1);
+  }
+  playDeck() {
+    if (this.state.shared) return this.state.shared.cards;
+    const cards = this.catCards(), sel = this.selectedWords();
+    const ordered = (this.state.order[this.key()] || []).filter(w => sel.indexOf(w) !== -1);
+    const rest = sel.filter(w => ordered.indexOf(w) === -1);
+    return ordered.concat(rest).map(w => cards.find(c => c.word === w)).filter(Boolean);
+  }
+  deckId() { return hash(this.playDeck().map(c => c.word).join("|")); }
+  deckPayload() {
+    return b64e(JSON.stringify({ v: 2, li: this.state.li, cat: this.state.cat,
+      cards: this.playDeck().map(c => Object.assign({}, c, { custom: undefined, edited: undefined })) }));
+  }
+  inviteUrl() { return location.origin + location.pathname + "#d=" + this.deckPayload(); }
+  resultCode(name, score, total) { return "WR1." + b64e(JSON.stringify({ n: name, s: score, t: total, d: this.deckId() })); }
+
+  copy = (text, msg) => {
+    if (navigator.clipboard && navigator.clipboard.writeText)
+      navigator.clipboard.writeText(text).then(() => this.setState({ status: msg }), () => this.setState({ status: this.tr("copyFail") }));
+    else this.setState({ status: this.tr("copyFail") });
+  };
+  setMap = (storeKey, stateKey, value) => {
+    const next = Object.assign({}, this.state[stateKey]); next[this.key()] = value;
+    put(storeKey, next); this.setState({ [stateKey]: next });
+  };
+  setPlayers = (players) => { put(K.players, players); this.setState({ players }); };
+  setBoard = (board) => { put(K.board, board); this.setState({ board }); };
+
+  reshuffle = () => { this.setMap(K.order, "order", shuffle(this.selectedWords()));
+    this.setState({ status: this.tr("shuffled"), pos: 0, studyPos: 0, flipped: false }); };
+
+  addPlayer = () => {
+    const n = this.state.nameDraft.trim(); if (!n) return;
+    if (this.state.players.length >= 6) { this.setState({ status: this.tr("maxPlayers") }); return; }
+    this.setPlayers(this.state.players.concat([{ name: n, score: 0 }]));
+    this.setState({ nameDraft: "", status: "" });
+  };
+
+  startSolo = () => {
+    const n = this.state.soloName.trim();
+    if (!n) { this.setState({ status: this.tr("needName") }); return; }
+    if (this.playDeck().length < 3) { this.setState({ status: this.tr("needWords") }); return; }
+    put(K.me, n); this.setPlayers([{ name: n, score: 0 }]);
+    this.setState({ view: "play", mode: "game", soloRound: true, pos: 0, turn: 0, answered: null, status: "" });
+  };
+  startLocal = () => {
+    if (this.state.players.length < 2) { this.setState({ status: this.tr("needPlayers") }); return; }
+    if (this.playDeck().length < 3) { this.setState({ status: this.tr("needWords") }); return; }
+    this.setPlayers(this.state.players.map(p => ({ name: p.name, score: 0 })));
+    this.setState({ view: "play", mode: "game", soloRound: false, pos: 0, turn: 0, answered: null, status: "" });
+  };
+
+  studyStep = (d) => this.setState(s => { const n = Math.max(1, this.playDeck().length);
+    return { studyPos: (s.studyPos + d + n) % n, flipped: false }; });
+  studyFlip = () => this.setState(s => ({ flipped: !s.flipped }));
+
+  nextCard = () => {
+    const total = this.playDeck().length, pos = this.state.pos + 1;
+    if (pos >= total) {
+      let last = null;
+      const me = this.state.players[0];
+      if (this.state.soloRound && me) {
+        last = { name: me.name, score: me.score, total: total, deckId: this.deckId() };
+        this.setBoard(this.state.board.filter(b => !(b.name === last.name && b.deckId === last.deckId)).concat([last]));
+      }
+      this.setState({ view: "results", answered: null, lastResult: last });
+      return;
+    }
+    this.setState({ pos, turn: (this.state.turn + 1) % Math.max(1, this.state.players.length), answered: null });
+  };
+
+  loadDeckCode = () => {
+    const m = (this.state.deckCodeDraft || "").match(/(?:WRD1\.|d=)([A-Za-z0-9\-_]+)/);
+    if (!m) { this.setState({ status: this.tr("badCode") }); return; }
+    try {
+      const p = JSON.parse(b64d(m[1]));
+      if (!p || !p.cards || !p.cards.length) throw new Error("empty");
+      this.setState({ shared: p, li: p.li || this.state.li, cat: p.cat || this.state.cat,
+        deckCodeDraft: "", status: this.tr("loadedDeck"), pos: 0, studyPos: 0 });
+    } catch (e) { this.setState({ status: this.tr("badCode") }); }
+  };
+
+  addResults = () => {
+    const lines = this.state.pasteDraft.split(/[\s,]+/).map(s => s.trim()).filter(Boolean);
+    let board = this.state.board.slice(), ok = 0;
+    lines.forEach(line => {
+      const m = line.match(/WR1\.([A-Za-z0-9\-_]+)/); if (!m) return;
+      try {
+        const p = JSON.parse(b64d(m[1])); if (!p || typeof p.s !== "number") return;
+        const entry = { name: String(p.n || "Player"), score: p.s, total: p.t || 0, deckId: p.d || "" };
+        board = board.filter(b => !(b.name === entry.name && b.deckId === entry.deckId)).concat([entry]);
+        ok++;
+      } catch (e) {}
+    });
+    this.setBoard(board);
+    this.setState({ pasteDraft: "", status: ok + " " + this.tr("resultsAdded") });
+  };
+
+  setField = (k) => (e) => { const v = e.target.value; this.setState(s => ({ draft: Object.assign({}, s.draft, { [k]: v }), status: "" })); };
+  setPart = (i, k) => (e) => { const v = e.target.value;
+    this.setState(s => ({ draft: Object.assign({}, s.draft, { parts: s.draft.parts.map((p, j) => j === i ? Object.assign({}, p, { [k]: v }) : p) }), status: "" })); };
+
+  save = () => {
+    const d = this.state.draft;
+    if (!d.word.trim()) { this.setState({ status: this.tr("needWordFirst") }); return; }
+    const card = toCard(d), ed = this.state.editing, k = this.key();
+    if (ed && ed.kind === "builtin") {
+      const map = Object.assign({}, this.state.overrides[k] || {}); map[ed.word] = card;
+      this.setMap(K.ovr, "overrides", map);
+    } else {
+      const list = (this.state.custom[k] || []).slice();
+      if (ed && ed.kind === "custom") list[ed.index] = card; else list.push(card);
+      this.setMap(K.custom, "custom", list);
+      if (!ed) {
+        const sel = this.state.selected[k];
+        if (sel) this.setMap(K.sel, "selected", sel.concat([card.word]));
+        this.setMap(K.order, "order", (this.state.order[k] || []).concat([card.word]));
+      }
+    }
+    this.setState({ status: (ed ? this.tr("updatedWord") : this.tr("addedWord")) + " " + card.word,
+      draft: JSON.parse(JSON.stringify(EMPTY)), editing: null });
+  };
+
+  renderVals() {
+    const data = D(), li = this.state.li, v = this.state.view;
+    const T = {}; Object.keys(data.T || {}).forEach(k => { T[k] = pick(data.T[k], li); });
+    T.editBtn = pick("Edit|Modifier|Editează|Editar", li);
+    const cards = this.catCards(), play = this.playDeck(), sel = this.selectedWords();
+    const players = this.state.players, solo = !!this.state.soloRound;
+    const turn = players.length ? this.state.turn % players.length : 0;
+    const card = play[Math.min(this.state.pos, Math.max(0, play.length - 1))] || { origin: "", source: { form: "", lang: "" }, parts: [], literal: "", def: "", related: [], word: "", ipa: "" };
+    const studyIdx = Math.min(this.state.studyPos, Math.max(0, play.length - 1));
+    const sCard = play[studyIdx] || card;
+    const askWord = (this.props.quizMode ?? "meaning") === "word";
+    const ans = this.state.answered;
+    const n = Math.max(1, (card.parts || []).length), sn = Math.max(1, (sCard.parts || []).length);
+    const catName = (id) => { const c = (data.CATS || []).find(x => x.id === id); return c ? pick(c.n, li) : id; };
+    const scriptLine = (t) => t
+      ? { fontFamily: "Bitter, Georgia, serif", fontWeight: 400, fontSize: "clamp(15px, 4.2vw, 20px)",
+          color: "#241f22", marginTop: "2px", textWrap: "balance" }
+      : { display: "none" };
+    const wordsFrom = pick((data.T || {}).wordsFrom || "", li);
+    // Below roughly 150px per branch the columns would crush narrower than one chip,
+    // so the tree stacks into full-width rows and drops its horizontal connector.
+    const isStacked = (c) => {
+      const n = Math.max(1, ((c && c.parts) || []).length);
+      return (Math.min(this.state.vw - 72, 880) - (n - 1) * 28) / n < 150;
+    };
+    const branchRow = (c) => isStacked(c)
+      ? { width: "100%", display: "flex", flexDirection: "column", gap: "14px" }
+      // Wrapping is a second safety net: if the row is ever narrower than the viewport
+      // suggests, branches drop to the next line instead of crushing under chip width.
+      : { width: "100%", display: "flex", alignItems: "flex-start", gap: "28px", flexWrap: "wrap" };
+    const branchCols = (c) => {
+      const split = splitByRoot(c, play);
+      const stack = isStacked(c);
+      return (c.parts || []).map((p, i) => {
+        const b = BRANCH[i % BRANCH.length];
+        const words = split.buckets[i] || [];
+        return {
+          colStyle: stack
+            ? { width: "100%", flex: "0 0 auto", display: "flex", flexDirection: "column", alignItems: "center" }
+            : { flex: "1 1 150px", minWidth: "140px", display: "flex", flexDirection: "column", alignItems: "center" },
+          form: p.form, lang: p.lang, gloss: p.gloss, words: words, hasWords: true,
+          // Grammatical affixes (-culus, com-) head no family of their own; say so rather
+          // than leaving a silent hole under one branch.
+          noWords: words.length ? "" : "—",
+          wordsLabel: wordsFrom + " " + p.form,
+          stemStyle: { width: "2px", height: stack && i === 0 ? "0" : "16px", background: b.ink, borderRadius: "1px" },
+          cardStyle: { width: "100%", border: "1px solid " + b.edge, borderTop: "3px solid " + b.ink,
+            background: b.tint, borderRadius: "5px", padding: "12px 10px", display: "flex",
+            flexDirection: "column", gap: "5px", textAlign: "center" },
+          formStyle: { fontFamily: "Bitter, Georgia, serif", fontSize: "clamp(15px, 4vw, 20px)",
+            fontWeight: 600, color: b.ink },
+          wordsBoxStyle: { width: "100%", display: "flex", flexDirection: "column", gap: "6px",
+            alignItems: "center", marginTop: "10px", paddingTop: "10px",
+            borderTop: "1px dashed " + b.edge },
+          noWordsStyle: { fontSize: "13px", color: "#a0928f", display: words.length ? "none" : "block" },
+          wordsLabelStyle: { fontSize: "10px", fontWeight: 600, letterSpacing: "0.1em",
+            textTransform: "uppercase", color: b.ink, textAlign: "center" },
+          chipStyle: { fontSize: "12px", color: "#3f3639", background: "#fffdfa",
+            border: "1px solid " + b.edge, borderRadius: "999px", padding: "4px 10px",
+            maxWidth: "100%", overflowWrap: "anywhere" }
+        };
+      });
+    };
+    const catTile = (i) => {
+      const c = (data.CATS || [])[i];
+      if (!c) return { name: "", count: "", pick: () => {} };
+      return { name: pick(c.n, li),
+        count: ((data.WORDS[c.id] || []).length + ((this.state.custom[li + "|" + c.id] || []).length)) + " " + pick((data.T || {}).cards || "", li),
+        pick: () => this.setState({ cat: c.id, studyPos: 0, pos: 0, flipped: false, answered: null,
+          view: this.state.mode === "study" ? "study" : "lobby", status: "" }) };
+    };
+
+    const pool = play.filter(c => c.word !== card.word);
+    const picks = [];
+    for (let k = 0; k < pool.length && picks.length < 2; k++) {
+      const c = pool[(this.state.pos * 7 + k * 3 + 1) % pool.length];
+      if (c && picks.indexOf(c) === -1) picks.push(c);
+    }
+    const fieldOf = askWord ? (c => c.word) : (c => c.literal);
+    const raw = [{ t: fieldOf(card), ok: true }].concat(picks.map(c => ({ t: fieldOf(c), ok: false })));
+    const rot = this.state.pos % Math.max(1, raw.length);
+    const opts = raw.slice(rot).concat(raw.slice(0, rot));
+
+    const h = {};
+    ["word", "ipa", "origin", "srcForm", "srcLang", "literal", "def", "related"].forEach(k => { h[k] = this.setField(k); });
+    const ed = this.state.editing, w = this.state.draft.word.trim();
+    const sorted = players.map((p, j) => ({ p, j })).sort((a, b) => b.p.score - a.p.score);
+    const top = sorted.length ? sorted[0].p.score : 0;
+    const winners = sorted.filter(x => x.p.score === top).map(x => x.p.name);
+    const chip = (i) => ({ width: "28px", height: "28px", borderRadius: "999px", flex: "0 0 auto",
+      display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", fontWeight: 600,
+      color: "#fffdfa", background: HUES[i % HUES.length] });
+    const tile = { display: "flex", alignItems: "center", gap: "14px", minHeight: "76px", padding: "14px 16px",
+      cursor: "pointer", background: "#fffdfa", border: "1px solid #e2d8d0", borderRadius: "5px", color: "#241f22",
+      textAlign: "left", transition: "border-color 150ms ease, background 150ms ease" };
+    const did = this.deckId();
+    const boardSorted = this.state.board.slice().sort((a, b) => b.score - a.score);
+    const lastCode = this.state.lastResult ? this.resultCode(this.state.lastResult.name, this.state.lastResult.score, this.state.lastResult.total) : "";
+    const boardText = T.standings + "\n" + boardSorted.map((b, i) => (i + 1) + ". " + b.name + " — " + b.score + (b.total ? "/" + b.total : "")).join("\n");
+    const backMap = { mode: "lang", cat: "mode", lobby: "cat", study: "cat", play: "cat", results: "cat",
+      scores: this.state.mode === "study" ? "cat" : "lobby", admin: this.state.mode === "study" ? "cat" : "lobby",
+      feedback: this.state.prevView, suggest: this.state.prevView };
+    const langNative = (data.LANGS[li] || {}).native || "";
+
+    return {
+      t: T, card: card, sCard: sCard, h: h, draft: this.state.draft, status: this.state.status,
+      isLang: v === "lang", isMode: v === "mode", isCat: v === "cat", isLobby: v === "lobby",
+      isStudy: v === "study", isPlay: v === "play", isResults: v === "results", isScores: v === "scores", isAdmin: v === "admin",
+      isFeedback: v === "feedback", isSuggest: v === "suggest",
+      linkedinUrl: (data.LINKS && data.LINKS.linkedin) || "",
+      hasLinkedIn: !!(data.LINKS && data.LINKS.linkedin),
+      goFeedback: () => this.openPanel("feedback"),
+      goSuggest: () => this.openPanel("suggest"),
+      stars: [1, 2, 3, 4, 5].map(k => ({
+        set: () => this.setState({ rating: k, status: T.thanksRated }),
+        style: { width: "48px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center",
+          background: k <= this.state.rating ? "#f4eaf0" : "transparent",
+          border: k <= this.state.rating ? "1px solid #5c2a4e" : "1px solid #ded3ca",
+          borderRadius: "5px", cursor: "pointer", padding: 0 },
+        svgStyle: { width: "26px", height: "26px", fill: k <= this.state.rating ? "#5c2a4e" : "none" }
+      })),
+      fbNote: this.state.fbNote,
+      setFbNote: (e) => this.setState({ fbNote: e.target.value }),
+      copyFeedback: this.copyFeedback,
+      sugCat: this.state.sugCat, sugWords: this.state.sugWords, sugWhy: this.state.sugWhy,
+      setSugCat: (e) => this.setState({ sugCat: e.target.value }),
+      setSugWords: (e) => this.setState({ sugWords: e.target.value }),
+      setSugWhy: (e) => this.setState({ sugWhy: e.target.value }),
+      copySuggestion: this.copySuggestion,
+      showNav: v !== "lang",
+      showScoresBtn: this.state.mode === "game" && ["lobby", "play", "results", "scores", "admin"].indexOf(v) !== -1,
+      isAdminUser: this.state.isAdminUser,
+      logoStyle: logoBox(card.logo, "clamp(48px, 13vw, 66px)", "0 0 12px"),
+      sLogoStyle: logoBox(sCard.logo, "clamp(56px, 16vw, 84px)", "0"),
+      treeParts: branchCols(card),
+      sTreeParts: branchCols(sCard),
+      // On many cards the ancestor form IS the modern spelling (carpe diem, spaghetti,
+      // Porsche); printing it twice on the card front tells the reader nothing.
+      // Case-only comparison: a macron (vīrus) or a word split (tirami sù) is still
+      // worth showing, so only an exact repeat of the headword is suppressed.
+      sAncestorStyle: String(sCard.source.form).trim().toLowerCase() === String(sCard.word).trim().toLowerCase()
+        ? { display: "none" }
+        : { display: "flex", flexDirection: "column", alignItems: "center", gap: "3px" },
+      srcMain: splitScript(card.source.form).main,
+      srcScript: splitScript(card.source.form).script,
+      srcScriptStyle: scriptLine(splitScript(card.source.form).script),
+      sSrcMain: splitScript(sCard.source.form).main,
+      sSrcScript: splitScript(sCard.source.form).script,
+      sSrcScriptStyle: scriptLine(splitScript(sCard.source.form).script),
+      treeRowStyle: branchRow(card),
+      sTreeRowStyle: branchRow(sCard),
+      spareWords: splitByRoot(card, play).spare,
+      sSpareWords: splitByRoot(sCard, play).spare,
+      breadcrumb: v === "lang" ? ""
+        : v === "feedback" ? T.feedback : v === "suggest" ? T.suggestTitle
+        : [langNative, v === "mode" ? "" : (this.state.mode === "study" ? T.study : T.game), (v === "mode" || v === "cat") ? "" : catName(this.state.cat)].filter(Boolean).join(" · "),
+      progress: v === "play" ? T.card + " " + (this.state.pos + 1) + " / " + play.length
+        : v === "study" ? (studyIdx + 1) + " / " + play.length : "",
+      goBack: () => this.setState({ view: backMap[v] || "lang", answered: null, status: "" }),
+      goScores: () => this.setState({ view: "scores", status: "" }),
+      goAdmin: () => this.setState({ view: v === "admin" ? (backMap.admin) : "admin", status: "" }),
+
+      tileStyle: tile,
+      bigTileStyle: Object.assign({}, tile, { alignItems: "center", justifyContent: "space-between", gap: "16px", minHeight: "128px", padding: "20px 22px" }),
+      pickEn: () => this.setState({ li: 0, view: "mode", status: "" }),
+      pickFr: () => this.setState({ li: 1, view: "mode", status: "" }),
+      pickRo: () => this.setState({ li: 2, view: "mode", status: "" }),
+      pickEs: () => this.setState({ li: 3, view: "mode", status: "" }),
+      chooseStudy: () => this.setState({ mode: "study", view: "cat", status: "" }),
+      chooseGame: () => this.setState({ mode: "game", view: "cat", status: "" }),
+      catTileStyle: Object.assign({}, tile, { alignItems: "center", justifyContent: "space-between", gap: "14px", minHeight: "96px", padding: "16px 18px" }),
+      catLabelStyle: { fontFamily: "Bitter, Georgia, serif", fontSize: "19px", fontWeight: 600, textAlign: "left", textWrap: "pretty" },
+      cat0: catTile(0), cat1: catTile(1), cat2: catTile(2), cat3: catTile(3), cat4: catTile(4), cat5: catTile(5), cat6: catTile(6),
+
+      soloName: this.state.soloName,
+      setSoloName: (e) => this.setState({ soloName: e.target.value }),
+      soloKey: (e) => { if (e.key === "Enter") this.startSolo(); },
+      startSolo: this.startSolo,
+      nameDraft: this.state.nameDraft,
+      setName: (e) => this.setState({ nameDraft: e.target.value }),
+      nameKey: (e) => { if (e.key === "Enter") this.addPlayer(); },
+      addPlayer: this.addPlayer,
+      startLocal: this.startLocal,
+      playerRows: players.map((p, i) => ({
+        name: p.name, initial: p.name.slice(0, 1).toUpperCase(), chipStyle: chip(i),
+        rowStyle: { display: "flex", alignItems: "center", justifyContent: "space-between", gap: "10px",
+          padding: "8px 0", borderTop: i === 0 ? "none" : "1px solid #ece3dc" },
+        remove: () => this.setPlayers(players.filter((_, j) => j !== i))
+      })),
+
+      isGuest: !!this.state.shared,
+      deckLine: catName(this.state.cat) + " · " + play.length + " " + T.cards + " · " + langNative,
+      copyInvite: () => this.copy(this.inviteUrl(), T.copiedInvite),
+      copyDeckCode: () => this.copy("WRD1." + this.deckPayload(), T.copiedDeck),
+      waInvite: "https://wa.me/?text=" + encodeURIComponent(T.waInvite + " " + this.inviteUrl()),
+      deckCodeDraft: this.state.deckCodeDraft,
+      setDeckCode: (e) => this.setState({ deckCodeDraft: e.target.value }),
+      loadDeckCode: this.loadDeckCode,
+      leaveShared: () => this.setState({ shared: null, status: "" }),
+
+      studyFlip: this.studyFlip,
+      studyNext: (e) => { e.stopPropagation(); this.studyStep(1); },
+      studyPrev: (e) => { e.stopPropagation(); this.studyStep(-1); },
+      // A stacked tree is much taller, so the flip card grows with it rather than clipping.
+      studyBoxStyle: { width: "100%", perspective: "1800px", cursor: "pointer",
+        height: isStacked(sCard)
+          ? "clamp(560px, 86svh, " + (420 + sn * 170) + "px)"
+          : "clamp(460px, 76svh, 640px)" },
+      studyInnerStyle: { position: "relative", width: "100%", height: "100%", transformStyle: "preserve-3d",
+        transition: "transform 620ms cubic-bezier(0.22, 0.7, 0.2, 1)",
+        transform: this.state.flipped ? "rotateY(180deg)" : "rotateY(0deg)" },
+      sBarStyle: { height: "1px", background: "#d5c9c2", alignSelf: "stretch",
+        display: isStacked(sCard) ? "none" : "block",
+        marginLeft: `calc((100% - ${(sn - 1) * 28}px) / ${2 * sn})`,
+        marginRight: `calc((100% - ${(sn - 1) * 28}px) / ${2 * sn})` },
+      studyDots: play.map((x, k) => ({
+        go: (e) => { e.stopPropagation(); this.setState({ studyPos: k, flipped: false }); },
+        style: { width: k === studyIdx ? "22px" : "8px", height: "8px", borderRadius: "999px",
+          background: k === studyIdx ? "#5c2a4e" : "#ded3ca", cursor: "pointer",
+          transition: "width 200ms ease, background 200ms ease" }
+      })),
+      reshuffle: this.reshuffle,
+
+      scoreChips: players.map((p, i) => ({
+        name: p.name, score: p.score,
+        style: { display: "flex", alignItems: "center", gap: "9px", padding: "8px 13px", borderRadius: "999px",
+          border: i === turn ? "1px solid #5c2a4e" : "1px solid #e2d8d0",
+          background: i === turn ? "#f4eaf0" : "#fffdfa", color: "#241f22" }
+      })),
+      turnLabel: solo ? T.playing : T.yourTurn,
+      turnName: players.length ? players[turn].name : "",
+      turnInitial: players.length ? players[turn].name.slice(0, 1).toUpperCase() : "?",
+      turnChipStyle: chip(turn),
+      prompt: askWord ? T.promptWord : T.promptMeaning,
+      headline: askWord ? (card.parts || []).map(p => p.form).join(" + ") : card.word,
+      subline: askWord ? (card.parts || []).map(p => p.gloss).join(" · ") : card.ipa,
+      headlineStyle: { fontFamily: "Bitter, Georgia, serif", fontWeight: 600, letterSpacing: "-0.02em",
+        lineHeight: 1.05, fontSize: askWord ? "clamp(24px, 6.5vw, 40px)" : "clamp(30px, 8.5vw, 54px)", textWrap: "balance" },
+      options: opts.map((o, i) => {
+        const chosen = ans && ans.chosenText === o.t, done = !!ans;
+        const good = done && o.ok, bad = done && chosen && !o.ok;
+        return {
+          label: o.t, letter: "ABC".charAt(i), mark: good ? "✓" : bad ? "✕" : "",
+          pick: () => { if (ans) return;
+            this.setState({ answered: { ok: o.ok, chosenText: o.t } });
+            if (o.ok) this.setPlayers(players.map((p, j) => j === turn ? { name: p.name, score: p.score + 1 } : p)); },
+          style: { display: "grid", gridTemplateColumns: "auto minmax(0,1fr) auto", alignItems: "center", gap: "12px",
+            width: "100%", minHeight: "58px", textAlign: "left", cursor: done ? "default" : "pointer",
+            padding: "14px 16px", borderRadius: "5px", transition: "background 160ms ease, border-color 160ms ease",
+            border: good ? "1px solid #1f4b43" : bad ? "1px solid #8a3324" : "1px solid #e2d8d0",
+            background: good ? "#eef5f2" : bad ? "#f9edea" : "#fff",
+            color: "#241f22", opacity: done && !good && !bad ? 0.55 : 1 },
+          letterStyle: { fontFamily: "Bitter, Georgia, serif", fontSize: "13px", fontWeight: 700,
+            width: "26px", height: "26px", borderRadius: "999px", display: "flex", alignItems: "center",
+            justifyContent: "center", color: "#8b7d82", border: "1px solid #e2d8d0", background: "#faf6f1" },
+          markStyle: { fontSize: "16px", fontWeight: 700, color: good ? "#1f4b43" : "#8a3324" }
+        };
+      }),
+      answered: !!ans,
+      verdict: ans ? (ans.ok ? T.correct : T.wrong) : "",
+      verdictNote: ans ? (ans.ok ? (players.length ? players[turn].name + " " + T.scores : "") : T.treeTells) : "",
+      revealStyle: { display: "flex", flexDirection: "column", gap: "13px", borderTop: "1px solid #ece3dc",
+        paddingTop: "18px", animation: "wr-in 260ms ease both" },
+      nextLabel: this.state.pos + 1 >= play.length ? T.seeScore : T.nextCard,
+      nextCard: this.nextCard,
+      barStyle: { height: "1px", background: "#d5c9c2", alignSelf: "stretch",
+        display: isStacked(card) ? "none" : "block",
+        marginLeft: `calc((100% - ${(n - 1) * 28}px) / ${2 * n})`,
+        marginRight: `calc((100% - ${(n - 1) * 28}px) / ${2 * n})` },
+
+      resultsKicker: solo ? T.yourRound : T.finalScore,
+      wasSolo: solo && !!this.state.lastResult,
+      winnerLine: solo
+        ? (players[0] ? players[0].name + " " + T.scoredOf + " " + players[0].score + " " + T.of + " " + play.length : T.roundOver)
+        : (winners.length > 1 ? winners.join(" & ") + " " + T.tieOn + " " + top : (winners[0] || "") + " " + T.winsWith + " " + top),
+      standings: sorted.map((x, i) => ({
+        rank: (i + 1) + ".", name: x.p.name, score: x.p.score, initial: x.p.name.slice(0, 1).toUpperCase(),
+        chipStyle: chip(x.j),
+        rowStyle: { display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px",
+          padding: "11px 0", borderTop: i === 0 ? "none" : "1px solid #ece3dc" }
+      })),
+      resultCode: lastCode,
+      copyResult: () => this.copy(lastCode, T.copiedResult),
+      waResult: "https://wa.me/?text=" + encodeURIComponent(lastCode),
+      playAgain: () => { if (!this.state.shared) this.reshuffle();
+        this.setPlayers(players.map(p => ({ name: p.name, score: 0 })));
+        this.setState({ view: "play", pos: 0, turn: 0, answered: null, lastResult: null }); },
+
+      pasteDraft: this.state.pasteDraft,
+      setPaste: (e) => this.setState({ pasteDraft: e.target.value }),
+      addResults: this.addResults,
+      clearBoard: () => { this.setBoard([]); this.setState({ status: T.boardCleared }); },
+      boardTitle: boardSorted.length ? T.standings : T.noResults,
+      boardNote: boardSorted.length ? boardSorted.length + " " + T.playersIn : T.pasteAbove,
+      board: boardSorted.map((b, i) => ({
+        rank: (i + 1) + ".", name: b.name, initial: b.name.slice(0, 1).toUpperCase(),
+        score: b.score + (b.total ? " / " + b.total : ""), chipStyle: chip(i),
+        flagStyle: { fontSize: "11px", color: "#8a3324", display: b.deckId && b.deckId !== did ? "block" : "none" },
+        rowStyle: { display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px",
+          padding: "11px 0", borderTop: i === 0 ? "none" : "1px solid #ece3dc" },
+        remove: () => this.setBoard(this.state.board.filter(x => !(x.name === b.name && x.deckId === b.deckId)))
+      })),
+      copyBoard: () => this.copy(boardText, T.copiedBoard),
+      waBoard: "https://wa.me/?text=" + encodeURIComponent(boardText),
+
+      adminDeckTitle: catName(this.state.cat) + " — " + sel.length + " / " + cards.length,
+      selectAll: () => this.setMap(K.sel, "selected", null),
+      selectNone: () => this.setMap(K.sel, "selected", []),
+      deckRows: cards.map((c, k) => {
+        const on = sel.indexOf(c.word) !== -1;
+        const builtinCount = (data.WORDS[this.state.cat] || []).length;
+        return {
+          word: c.word, literal: c.literal, removable: !!c.custom,
+          tick: on ? "✓" : "", badge: c.custom ? T.mine : (c.edited ? T.edited : ""),
+          badgeStyle: { fontSize: "10px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase",
+            color: "#5c2a4e", background: "#f4eaf0", border: "1px solid #e4d2dd", borderRadius: "999px",
+            padding: "2px 7px", display: (c.custom || c.edited) ? "block" : "none" },
+          boxStyle: { width: "22px", height: "22px", flex: "0 0 auto", borderRadius: "5px", display: "flex",
+            alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 700,
+            color: "#fffdfa", background: on ? "#5c2a4e" : "#fff", border: on ? "1px solid #5c2a4e" : "1px solid #ded3ca" },
+          style: { display: "flex", alignItems: "center", gap: "10px", padding: "11px 12px", cursor: "pointer",
+            borderRadius: "5px", background: on ? "#fdfaf7" : "#f7f2ec",
+            border: on ? "1px solid #e2d8d0" : "1px solid #ece3dc", opacity: on ? 1 : 0.72 },
+          toggle: () => { const all = cards.map(x => x.word);
+            const cur = this.state.selected[this.key()] || all;
+            this.setMap(K.sel, "selected", on ? cur.filter(x => x !== c.word) : cur.concat([c.word])); },
+          edit: (e) => { e.stopPropagation(); this.setState({ draft: toDraft(c),
+            editing: { kind: c.custom ? "custom" : "builtin", word: c.word, index: k - builtinCount }, status: "" }); },
+          remove: (e) => { e.stopPropagation();
+            this.setMap(K.custom, "custom", (this.state.custom[this.key()] || []).filter((_, j) => j !== (k - builtinCount)));
+            this.setState({ status: T.removedWord + " " + c.word }); }
+        };
+      }),
+      formTitle: ed ? T.editing + " " + ed.word : T.addWord,
+      saveLabel: ed ? T.saveEdit : T.saveNew,
+      lookupUrl: w ? "https://www.etymonline.com/fr/search?q=" + encodeURIComponent(w) : "https://www.etymonline.com/fr",
+      addPart: () => this.setState(s => ({ draft: Object.assign({}, s.draft, { parts: s.draft.parts.concat([{ form: "", lang: "", gloss: "" }]) }) })),
+      partRows: this.state.draft.parts.map((p, j) => ({
+        form: p.form, lang: p.lang, gloss: p.gloss,
+        hForm: this.setPart(j, "form"), hLang: this.setPart(j, "lang"), hGloss: this.setPart(j, "gloss"),
+        remove: () => this.setState(s => ({ draft: Object.assign({}, s.draft,
+          { parts: s.draft.parts.length > 1 ? s.draft.parts.filter((_, k) => k !== j) : s.draft.parts }) }))
+      })),
+      clearDraft: () => this.setState({ draft: JSON.parse(JSON.stringify(EMPTY)), editing: null, status: "" }),
+      save: this.save,
+      resetAll: () => { this.setMap(K.custom, "custom", []); this.setMap(K.ovr, "overrides", {});
+        this.setMap(K.sel, "selected", null); this.setMap(K.order, "order", []);
+        this.setState({ status: T.resetDone }); }
+    };
+  }
+}
+
+</script>
+</body>
+</html>

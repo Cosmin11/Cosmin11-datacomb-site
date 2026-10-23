@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,600;0,700;1,400&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  body { margin: 0; background: #f7f2ec; color: #241f22; }
+  a { color: #5c2a4e; }
+  a:hover { color: #8a3f6f; }
+  input, textarea { font-family: 'Public Sans', system-ui, sans-serif; }
+  input:focus, textarea:focus { outline: none; border-color: #5c2a4e; }
+</style>
+</helmet>
+<div style="min-height: 100vh; padding: 40px 28px 64px; display: flex; flex-direction: column; align-items: center; gap: 28px; font-family: 'Public Sans', system-ui, sans-serif;">
+
+  <div style="width: 100%; max-width: 880px; display: flex; align-items: baseline; justify-content: space-between; gap: 20px; border-bottom: 1px solid #e2d8d0; padding-bottom: 14px;">
+    <div style="display: flex; flex-direction: column; gap: 4px;">
+      <div style="font-family: Bitter, Georgia, serif; font-size: 26px; font-weight: 700; letter-spacing: -0.01em;">Word Roots</div>
+      <div style="font-size: 13px; color: #7c6f74;">{{ subhead }}</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <div style="font-family: Bitter, Georgia, serif; font-size: 15px; color: #7c6f74; white-space: nowrap;">{{ counter }}</div>
+      <button onClick="{{ toggleView }}" style="font-family: 'Public Sans', sans-serif; font-size: 13px; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 2px; padding: 8px 14px; cursor: pointer; white-space: nowrap;" style-hover="background: #efe7df; border-color: #c6b8ae;">{{ viewLabel }}</button>
+    </div>
+  </div>
+
+  <sc-if value="{{ isCards }}" hint-placeholder-val="{{ true }}">
+    <div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 28px;">
+
+      <div onClick="{{ flip }}" style="width: 100%; max-width: 880px; height: 560px; perspective: 1800px; cursor: pointer;">
+        <div style="{{ innerStyle }}">
+
+          <div style="position: absolute; inset: 0; backface-visibility: hidden; background: #fffdfa; border: 1px solid #e2d8d0; border-radius: 3px; box-shadow: 0 1px 0 #e9e0d8, 0 18px 40px -28px rgba(36,31,34,0.35); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; padding: 48px; text-align: center;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #5c2a4e; border: 1px solid #d9c6d1; border-radius: 999px; padding: 6px 14px;">{{ card.origin }}</div>
+            <div style="font-family: Bitter, Georgia, serif; font-size: 68px; font-weight: 600; line-height: 1.05; letter-spacing: -0.02em; text-wrap: balance;">{{ card.word }}</div>
+            <div style="font-family: Bitter, Georgia, serif; font-style: italic; font-size: 21px; color: #7c6f74;">{{ card.ipa }}</div>
+            <div style="width: 44px; height: 1px; background: #e2d8d0;"></div>
+            <div style="font-size: 13px; color: #a0928f; letter-spacing: 0.04em;">tap to reveal the tree</div>
+          </div>
+
+          <div style="position: absolute; inset: 0; backface-visibility: hidden; transform: rotateY(180deg); background: #fffdfa; border: 1px solid #e2d8d0; border-radius: 3px; box-shadow: 0 1px 0 #e9e0d8, 0 18px 40px -28px rgba(36,31,34,0.35); padding: 34px 40px; display: flex; flex-direction: column; gap: 18px; overflow: hidden;">
+
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <div style="display: flex; flex-direction: column; align-items: center; border: 1px solid #cdbfc6; background: #f9f3f6; border-radius: 3px; padding: 10px 22px;">
+                <div style="font-family: Bitter, Georgia, serif; font-size: 26px; font-weight: 600; color: #5c2a4e;">{{ card.source.form }}</div>
+                <div style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82; margin-top: 3px;">{{ card.source.lang }}</div>
+              </div>
+              <div style="width: 1px; height: 18px; background: #d5c9c2;"></div>
+              <div style="{{ barStyle }}"></div>
+              <div style="width: 100%; display: flex; align-items: stretch; gap: 20px;">
+                <sc-for list="{{ card.parts }}" as="part" hint-placeholder-count="2">
+                  <div style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center;">
+                    <div style="width: 1px; height: 18px; background: #d5c9c2;"></div>
+                    <div style="width: 100%; border: 1px solid #e2d8d0; border-top: 2px solid #5c2a4e; background: #fff; border-radius: 2px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; text-align: center;">
+                      <div style="font-family: Bitter, Georgia, serif; font-size: 22px; font-weight: 600;">{{ part.form }}</div>
+                      <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #8b7d82;">{{ part.lang }}</div>
+                      <div style="font-family: Bitter, Georgia, serif; font-style: italic; font-size: 16px; color: #3f3639; text-wrap: pretty;">{{ part.gloss }}</div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: baseline; gap: 12px; border-top: 1px solid #ece3dc; border-bottom: 1px solid #ece3dc; padding: 14px 0;">
+              <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82; white-space: nowrap;">Literally</div>
+              <div style="font-family: Bitter, Georgia, serif; font-size: 20px; font-weight: 600; color: #5c2a4e; text-wrap: pretty;">{{ card.literal }}</div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 28px; align-items: start;">
+              <div style="display: flex; flex-direction: column; gap: 12px; min-width: 0;">
+                <div style="font-size: 15px; line-height: 1.55; color: #3f3639; text-wrap: pretty;">{{ card.def }}</div>
+                <sc-if value="{{ showExample }}" hint-placeholder-val="{{ true }}">
+                  <div style="font-family: Bitter, Georgia, serif; font-style: italic; font-size: 14px; line-height: 1.5; color: #7c6f74; border-left: 2px solid #e2d8d0; padding-left: 12px; text-wrap: pretty;">{{ card.example }}</div>
+                </sc-if>
+              </div>
+              <sc-if value="{{ showRelated }}" hint-placeholder-val="{{ true }}">
+                <div style="display: flex; flex-direction: column; gap: 9px; min-width: 0;">
+                  <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">Same roots</div>
+                  <div style="display: flex; flex-wrap: wrap; gap: 7px;">
+                    <sc-for list="{{ card.related }}" as="rel" hint-placeholder-count="3">
+                      <div style="font-size: 13px; color: #3f3639; background: #f4eee7; border: 1px solid #e6ddd5; border-radius: 999px; padding: 4px 11px;">{{ rel }}</div>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div style="width: 100%; max-width: 880px; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+        <button onClick="{{ prev }}" style="font-family: 'Public Sans', sans-serif; font-size: 14px; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 2px; padding: 10px 20px; cursor: pointer;" style-hover="background: #efe7df; border-color: #c6b8ae;">← Previous</button>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;">
+          <sc-for list="{{ dots }}" as="dot" hint-placeholder-count="12">
+            <div onClick="{{ dot.go }}" style="{{ dot.style }}"></div>
+          </sc-for>
+        </div>
+        <button onClick="{{ next }}" style="font-family: 'Public Sans', sans-serif; font-size: 14px; color: #fffdfa; background: #5c2a4e; border: 1px solid #5c2a4e; border-radius: 2px; padding: 10px 20px; cursor: pointer;" style-hover="background: #47203c;">Next word →</button>
+      </div>
+
+      <div style="font-size: 12px; color: #a0928f;">Space flips · ← → to move</div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
+    <div style="width: 100%; max-width: 880px; display: flex; flex-direction: column; gap: 32px;">
+
+      <div style="display: flex; flex-direction: column; gap: 18px; background: #fffdfa; border: 1px solid #e2d8d0; border-radius: 3px; padding: 26px 28px;">
+        <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+          <div style="font-family: Bitter, Georgia, serif; font-size: 20px; font-weight: 600;">{{ formTitle }}</div>
+          <div style="font-size: 12px; color: #7c6f74;">Saved in this browser</div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px; background: #f9f3f6; border: 1px solid #e8dbe2; border-radius: 2px; padding: 16px 18px;">
+          <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">Research the word</div>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+            <input value="{{ draft.word }}" onChange="{{ h.word }}" placeholder="word, e.g. decathlon" style="flex: 1 1 220px; min-width: 0; font-size: 15px; padding: 9px 12px; border: 1px solid #ded3ca; border-radius: 2px; background: #fff; color: #241f22;" />
+            <a href="{{ lookupUrl }}" target="_blank" rel="noopener" style="font-size: 13px; font-weight: 500; text-decoration: none; border: 1px solid #cdbfc6; border-radius: 2px; padding: 9px 14px; white-space: nowrap;">Look up on etymonline ↗</a>
+          </div>
+          <div style="font-size: 12px; line-height: 1.5; color: #7c6f74; text-wrap: pretty;">Opens the entry in a new tab. Read it there, then fill the fields below in your own words — the site's text is copyrighted, so nothing is copied across automatically.</div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px;">
+          <div style="display: flex; flex-direction: column; gap: 6px; min-width: 0;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">Pronunciation</div>
+            <input value="{{ draft.ipa }}" onChange="{{ h.ipa }}" placeholder="/dɪˈkæθlɒn/" style="font-size: 14px; padding: 9px 12px; border: 1px solid #ded3ca; border-radius: 2px; background: #fff; color: #241f22;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px; min-width: 0;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">Language of origin</div>
+            <input value="{{ draft.origin }}" onChange="{{ h.origin }}" placeholder="Greek" style="font-size: 14px; padding: 9px 12px; border: 1px solid #ded3ca; border-radius: 2px; background: #fff; color: #241f22;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px; min-width: 0;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">Ancestor form</div>
+            <input value="{{ draft.srcForm }}" onChange="{{ h.srcForm }}" placeholder="δέκαθλον · dékathlon" style="font-size: 14px; padding: 9px 12px; border: 1px solid #ded3ca; border-radius: 2px; background: #fff; color: #241f22;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px; min-width: 0;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">Ancestor language</div>
+            <input value="{{ draft.srcLang }}" onChange="{{ h.srcLang }}" placeholder="Ancient Greek" style="font-size: 14px; padding: 9px 12px; border: 1px solid #ded3ca; border-radius: 2px; background: #fff; color: #241f22;" />
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">Root parts (tree branches)</div>
+            <div style="display: flex; gap: 8px;">
+              <button onClick="{{ addPart }}" style="font-family: 'Public Sans', sans-serif; font-size: 13px; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 2px; padding: 7px 13px; cursor: pointer;" style-hover="background: #efe7df;">+ Add part</button>
+            </div>
+          </div>
+          <sc-for list="{{ partRows }}" as="row" hint-placeholder-count="2">
+            <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.4fr) auto; gap: 10px; align-items: center;">
+              <input value="{{ row.form }}" onChange="{{ row.hForm }}" placeholder="déka" style="min-width: 0; font-size: 14px; padding: 9px 12px; border: 1px solid #ded3ca; border-radius: 2px; background: #fff; color: #241f22;" />
+              <input value="{{ row.lang }}" onChange="{{ row.hLang }}" placeholder="Greek" style="min-width: 0; font-size: 14px; padding: 9px 12px; border: 1px solid #ded3ca; border-radius: 2px; background: #fff; color: #241f22;" />
+              <input value="{{ row.gloss }}" onChange="{{ row.hGloss }}" placeholder="ten" style="min-width: 0; font-size: 14px; padding: 9px 12px; border: 1px solid #ded3ca; border-radius: 2px; background: #fff; color: #241f22;" />
+              <button onClick="{{ row.remove }}" style="font-family: 'Public Sans', sans-serif; font-size: 13px; color: #8a3324; background: transparent; border: 1px solid #e4d2cd; border-radius: 2px; padding: 8px 12px; cursor: pointer;" style-hover="background: #f6ece9;">Remove</button>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">Literal meaning</div>
+            <input value="{{ draft.literal }}" onChange="{{ h.literal }}" placeholder="ten contests" style="font-size: 14px; padding: 9px 12px; border: 1px solid #ded3ca; border-radius: 2px; background: #fff; color: #241f22;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">Modern definition</div>
+            <textarea value="{{ draft.def }}" onChange="{{ h.def }}" rows="2" placeholder="What the word means today" style="font-size: 14px; line-height: 1.5; padding: 9px 12px; border: 1px solid #ded3ca; border-radius: 2px; background: #fff; color: #241f22; resize: vertical;"></textarea>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">Example sentence</div>
+            <textarea value="{{ draft.example }}" onChange="{{ h.example }}" rows="2" placeholder="A sentence using the word" style="font-size: 14px; line-height: 1.5; padding: 9px 12px; border: 1px solid #ded3ca; border-radius: 2px; background: #fff; color: #241f22; resize: vertical;"></textarea>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">Related words — comma separated</div>
+            <input value="{{ draft.related }}" onChange="{{ h.related }}" placeholder="decade, decagon, pentathlon" style="font-size: 14px; padding: 9px 12px; border: 1px solid #ded3ca; border-radius: 2px; background: #fff; color: #241f22;" />
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; border-top: 1px solid #ece3dc; padding-top: 16px;">
+          <button onClick="{{ save }}" style="font-family: 'Public Sans', sans-serif; font-size: 14px; color: #fffdfa; background: #5c2a4e; border: 1px solid #5c2a4e; border-radius: 2px; padding: 10px 20px; cursor: pointer;" style-hover="background: #47203c;">{{ saveLabel }}</button>
+          <button onClick="{{ clearDraft }}" style="font-family: 'Public Sans', sans-serif; font-size: 14px; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 2px; padding: 10px 18px; cursor: pointer;" style-hover="background: #efe7df;">Clear form</button>
+          <div style="font-size: 13px; color: #5c2a4e;">{{ status }}</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+          <div style="font-family: Bitter, Georgia, serif; font-size: 20px; font-weight: 600;">Deck — {{ listCount }}</div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button onClick="{{ exportJson }}" style="font-family: 'Public Sans', sans-serif; font-size: 13px; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 2px; padding: 8px 14px; cursor: pointer;" style-hover="background: #efe7df;">Copy deck as JSON</button>
+            <button onClick="{{ resetAll }}" style="font-family: 'Public Sans', sans-serif; font-size: 13px; color: #8a3324; background: transparent; border: 1px solid #e4d2cd; border-radius: 2px; padding: 8px 14px; cursor: pointer;" style-hover="background: #f6ece9;">Remove my additions</button>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; border: 1px solid #e2d8d0; border-radius: 3px; overflow: hidden; background: #fffdfa;">
+          <sc-for list="{{ rows }}" as="r" hint-placeholder-count="6">
+            <div style="{{ r.rowStyle }}">
+              <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1 1 auto;">
+                <div style="display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap;">
+                  <div style="font-family: Bitter, Georgia, serif; font-size: 17px; font-weight: 600;">{{ r.word }}</div>
+                  <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #8b7d82;">{{ r.origin }}</div>
+                  <div style="{{ r.badgeStyle }}">{{ r.badge }}</div>
+                </div>
+                <div style="font-family: Bitter, Georgia, serif; font-style: italic; font-size: 14px; color: #7c6f74; text-wrap: pretty;">{{ r.literal }}</div>
+              </div>
+              <div style="display: flex; gap: 7px; flex: 0 0 auto;">
+                <button onClick="{{ r.view }}" style="font-family: 'Public Sans', sans-serif; font-size: 13px; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 2px; padding: 7px 12px; cursor: pointer;" style-hover="background: #efe7df;">Show card</button>
+                <button onClick="{{ r.edit }}" style="font-family: 'Public Sans', sans-serif; font-size: 13px; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 2px; padding: 7px 12px; cursor: pointer;" style-hover="background: #efe7df;">Edit</button>
+                <sc-if value="{{ r.removable }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ r.remove }}" style="font-family: 'Public Sans', sans-serif; font-size: 13px; color: #8a3324; background: transparent; border: 1px solid #e4d2cd; border-radius: 2px; padding: 7px 12px; cursor: pointer;" style-hover="background: #f6ece9;">Delete</button>
+                </sc-if>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:960,&quot;height&quot;:860},&quot;revealMode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;flip&quot;,&quot;instant&quot;],&quot;default&quot;:&quot;flip&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Behavior&quot;},&quot;showExample&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Card content&quot;},&quot;showRelated&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Card content&quot;}}">
+const BUILT_IN = [
+  { word: "decathlon", ipa: "/dɪˈkæθlɒn/", origin: "Greek", source: { form: "δέκαθλον · dékathlon", lang: "Ancient Greek" },
+    parts: [ { form: "déka", lang: "Greek", gloss: "ten" }, { form: "áthlon", lang: "Greek", gloss: "contest, prize" } ],
+    literal: "ten contests", def: "A men's track-and-field event made up of ten separate disciplines, scored as one total.",
+    example: "He led after the first day of the decathlon.", related: ["decade", "decagon", "pentathlon", "athlete"] },
+  { word: "hippopotamus", ipa: "/ˌhɪpəˈpɒtəməs/", origin: "Greek", source: { form: "ἱπποπόταμος · hippopótamos", lang: "Ancient Greek" },
+    parts: [ { form: "híppos", lang: "Greek", gloss: "horse" }, { form: "potamós", lang: "Greek", gloss: "river" } ],
+    literal: "river horse", def: "A massive African mammal that spends its days in rivers and lakes.",
+    example: "The Greeks knew the hippopotamus from the Nile.", related: ["hippodrome", "Philip", "Mesopotamia"] },
+  { word: "dinosaur", ipa: "/ˈdaɪnəsɔː/", origin: "Greek", source: { form: "Dinosauria", lang: "Scientific Latin, 1842" },
+    parts: [ { form: "deinós", lang: "Greek", gloss: "terrible, fearfully great" }, { form: "saûros", lang: "Greek", gloss: "lizard" } ],
+    literal: "terrible lizard", def: "Any of the reptiles that dominated land life through the Mesozoic era.",
+    example: "Richard Owen coined dinosaur for the giant fossil reptiles.", related: ["deinonychus", "brontosaurus"] },
+  { word: "astronaut", ipa: "/ˈæstrənɔːt/", origin: "Greek", source: { form: "astronautes", lang: "Modern coinage, 1920s" },
+    parts: [ { form: "ástron", lang: "Greek", gloss: "star" }, { form: "naútēs", lang: "Greek", gloss: "sailor" } ],
+    literal: "star sailor", def: "A person trained to travel and work in a spacecraft.",
+    example: "The word astronaut followed the older nautical sense of a ship's crew.", related: ["astronomy", "nautical", "disaster", "argonaut"] },
+  { word: "nostalgia", ipa: "/nɒsˈtældʒə/", origin: "Greek", source: { form: "nostalgia", lang: "Medical Latin, 1688" },
+    parts: [ { form: "nóstos", lang: "Greek", gloss: "homecoming" }, { form: "álgos", lang: "Greek", gloss: "pain, ache" } ],
+    literal: "the ache to return home", def: "A wistful longing for the past — first described as a homesickness serious enough to treat as an illness.",
+    example: "A Swiss physician named nostalgia as a disease of soldiers far from home.", related: ["neuralgia", "analgesic", "nostos"] },
+  { word: "sarcasm", ipa: "/ˈsɑːkæzəm/", origin: "Greek", source: { form: "σαρκάζειν · sarkázein", lang: "Ancient Greek" },
+    parts: [ { form: "sárx, sark-", lang: "Greek", gloss: "flesh" }, { form: "-asmos", lang: "Greek", gloss: "act of (noun suffix)" } ],
+    literal: "a tearing of the flesh", def: "Mocking speech that says the opposite of what it means.",
+    example: "The root verb meant to strip off flesh, as dogs do.", related: ["sarcophagus", "sarcoma", "sarcastic"] },
+  { word: "sarcophagus", ipa: "/sɑːˈkɒfəɡəs/", origin: "Greek", source: { form: "σαρκοφάγος · sarkophágos", lang: "Ancient Greek" },
+    parts: [ { form: "sárx, sark-", lang: "Greek", gloss: "flesh" }, { form: "phageîn", lang: "Greek", gloss: "to eat" } ],
+    literal: "flesh eater", def: "A stone coffin — named for a limestone believed to consume the body placed inside it.",
+    example: "The museum's Roman sarcophagus is carved on three sides.", related: ["sarcasm", "esophagus", "anthropophagy"] },
+  { word: "companion", ipa: "/kəmˈpænjən/", origin: "Latin", source: { form: "companio", lang: "Late Latin → Old French" },
+    parts: [ { form: "com-", lang: "Latin", gloss: "with, together" }, { form: "pānis", lang: "Latin", gloss: "bread" } ],
+    literal: "one who shares bread", def: "A person you spend time with or travel alongside.",
+    example: "A companion was originally a messmate, someone at the same loaf.", related: ["company", "pantry", "accompany"] },
+  { word: "muscle", ipa: "/ˈmʌsl̩/", origin: "Latin", source: { form: "mūsculus", lang: "Latin" },
+    parts: [ { form: "mūs", lang: "Latin", gloss: "mouse" }, { form: "-culus", lang: "Latin", gloss: "little (diminutive)" } ],
+    literal: "little mouse", def: "Tissue that contracts to move the body.",
+    example: "A flexing bicep was thought to look like a mouse under the skin.", related: ["mussel", "mouse", "musculature"] },
+  { word: "salary", ipa: "/ˈsæləri/", origin: "Latin", source: { form: "salārium", lang: "Latin" },
+    parts: [ { form: "sāl", lang: "Latin", gloss: "salt" }, { form: "-ārium", lang: "Latin", gloss: "thing connected with" } ],
+    literal: "salt money", def: "Fixed pay for regular work, usually monthly.",
+    example: "A Roman salarium was an allowance connected with salt.", related: ["saline", "salad", "sauce", "salami"] },
+  { word: "alcohol", ipa: "/ˈælkəhɒl/", origin: "Arabic", source: { form: "الكحل · al-kuḥl", lang: "Arabic" },
+    parts: [ { form: "al-", lang: "Arabic", gloss: "the" }, { form: "kuḥl", lang: "Arabic", gloss: "powdered antimony, eye paint" } ],
+    literal: "the kohl", def: "The intoxicating spirit in drinks — the name moved from a distilled powder to any distilled essence.",
+    example: "Alchemists carried the Arabic word into Latin as a term for any fine distillate.", related: ["kohl", "alchemy", "algebra", "alkali"] },
+  { word: "calculate", ipa: "/ˈkælkjʊleɪt/", origin: "Latin", source: { form: "calculāre", lang: "Latin" },
+    parts: [ { form: "calx, calc-", lang: "Latin", gloss: "limestone, pebble" }, { form: "-ulus", lang: "Latin", gloss: "little (diminutive)" } ],
+    literal: "to work with little pebbles", def: "To work something out by arithmetic or reasoning.",
+    example: "Romans counted with pebbles on a board before they calculated on paper.", related: ["calculus", "calcium", "chalk"] }
+];
+
+const KEY = "wordroots.custom.v1";
+const OVR = "wordroots.overrides.v1";
+const EMPTY = { word: "", ipa: "", origin: "", srcForm: "", srcLang: "", literal: "", def: "", example: "", related: "",
+  parts: [ { form: "", lang: "", gloss: "" }, { form: "", lang: "", gloss: "" } ] };
+
+function load(key) {
+  try { const v = JSON.parse(localStorage.getItem(key) || "null"); return v && typeof v === "object" ? v : null; } catch (e) { return null; }
+}
+function toCard(d) {
+  return { word: d.word.trim(), ipa: d.ipa.trim(), origin: d.origin.trim() || "Origin",
+    source: { form: d.srcForm.trim() || d.word.trim(), lang: d.srcLang.trim() || d.origin.trim() },
+    parts: d.parts.filter(p => p.form.trim() || p.gloss.trim()).map(p => ({ form: p.form.trim(), lang: p.lang.trim(), gloss: p.gloss.trim() })),
+    literal: d.literal.trim(), def: d.def.trim(), example: d.example.trim(),
+    related: d.related.split(",").map(s => s.trim()).filter(Boolean), custom: true };
+}
+function toDraft(c) {
+  return { word: c.word || "", ipa: c.ipa || "", origin: c.origin || "", srcForm: (c.source && c.source.form) || "",
+    srcLang: (c.source && c.source.lang) || "", literal: c.literal || "", def: c.def || "", example: c.example || "",
+    related: (c.related || []).join(", "),
+    parts: (c.parts && c.parts.length ? c.parts : EMPTY.parts).map(p => ({ form: p.form || "", lang: p.lang || "", gloss: p.gloss || "" })) };
+}
+
+class Component extends DCLogic {
+  state = { i: 0, flipped: false, view: "cards", custom: [], overrides: {}, draft: JSON.parse(JSON.stringify(EMPTY)), editing: null, status: "" };
+
+  componentDidMount() {
+    this.setState({ custom: load(KEY) || [], overrides: load(OVR) || {} });
+    this._key = (e) => {
+      if (this.state.view !== "cards") return;
+      const t = e.target && e.target.tagName;
+      if (t === "INPUT" || t === "TEXTAREA") return;
+      if (e.key === " ") { e.preventDefault(); this.flip(); }
+      else if (e.key === "ArrowRight") this.step(1);
+      else if (e.key === "ArrowLeft") this.step(-1);
+    };
+    window.addEventListener("keydown", this._key);
+  }
+  componentWillUnmount() { window.removeEventListener("keydown", this._key); }
+
+  deck() {
+    const ov = this.state.overrides || {};
+    const base = BUILT_IN.map(c => ov[c.word] ? Object.assign({}, ov[c.word], { custom: false, edited: true }) : c);
+    return base.concat(this.state.custom);
+  }
+
+  persist(custom, overrides) {
+    const c = custom || this.state.custom, o = overrides || this.state.overrides;
+    try { localStorage.setItem(KEY, JSON.stringify(c)); localStorage.setItem(OVR, JSON.stringify(o)); } catch (e) {}
+    this.setState({ custom: c, overrides: o });
+  }
+
+  flip = () => this.setState(s => ({ flipped: !s.flipped }));
+  step = (d) => this.setState(s => { const n = this.deck().length; return { i: (s.i + d + n) % n, flipped: false }; });
+
+  setField = (k) => (e) => { const v = e.target.value; this.setState(s => ({ draft: Object.assign({}, s.draft, { [k]: v }), status: "" })); };
+  setPart = (idx, k) => (e) => {
+    const v = e.target.value;
+    this.setState(s => { const parts = s.draft.parts.map((p, j) => j === idx ? Object.assign({}, p, { [k]: v }) : p);
+      return { draft: Object.assign({}, s.draft, { parts: parts }), status: "" }; });
+  };
+
+  save = () => {
+    const d = this.state.draft;
+    if (!d.word.trim()) { this.setState({ status: "Add a word first." }); return; }
+    const card = toCard(d);
+    const ed = this.state.editing;
+    if (ed && ed.kind === "builtin") {
+      const o = Object.assign({}, this.state.overrides); o[ed.word] = card;
+      this.persist(null, o);
+      this.setState({ status: "Updated " + card.word + ".", draft: JSON.parse(JSON.stringify(EMPTY)), editing: null });
+      return;
+    }
+    let custom = this.state.custom.slice();
+    if (ed && ed.kind === "custom") custom[ed.index] = card;
+    else custom.push(card);
+    this.persist(custom, null);
+    this.setState({ status: (ed ? "Updated " : "Added ") + card.word + ".", draft: JSON.parse(JSON.stringify(EMPTY)), editing: null });
+  };
+
+  renderVals() {
+    const deck = this.deck();
+    const idx = Math.min(this.state.i, Math.max(0, deck.length - 1));
+    const card = deck[idx] || BUILT_IN[0];
+    const n = Math.max(1, (card.parts || []).length);
+    const gap = 20;
+    const instant = (this.props.revealMode ?? "flip") === "instant";
+    const isAdmin = this.state.view === "admin";
+    const ed = this.state.editing;
+    const w = this.state.draft.word.trim();
+
+    const h = {};
+    ["word", "ipa", "origin", "srcForm", "srcLang", "literal", "def", "example", "related"].forEach(k => { h[k] = this.setField(k); });
+
+    return {
+      card, h,
+      draft: this.state.draft,
+      isCards: !isAdmin, isAdmin,
+      viewLabel: isAdmin ? "← Back to cards" : "Manage words",
+      subhead: isAdmin ? "Add, edit and reorder the deck" : "Click the card to see where the word comes from",
+      counter: isAdmin ? "" : (idx + 1) + " / " + deck.length,
+      listCount: deck.length + " words",
+      formTitle: ed ? "Editing " + ed.word : "Add a word",
+      saveLabel: ed ? "Save changes" : "Add to deck",
+      status: this.state.status,
+      lookupUrl: w ? "https://www.etymonline.com/fr/search?q=" + encodeURIComponent(w) : "https://www.etymonline.com/fr",
+      toggleView: () => this.setState(s => ({ view: s.view === "admin" ? "cards" : "admin", flipped: false, status: "" })),
+      flip: this.flip,
+      next: (e) => { e.stopPropagation(); this.step(1); },
+      prev: (e) => { e.stopPropagation(); this.step(-1); },
+      addPart: () => this.setState(s => ({ draft: Object.assign({}, s.draft, { parts: s.draft.parts.concat([{ form: "", lang: "", gloss: "" }]) }) })),
+      clearDraft: () => this.setState({ draft: JSON.parse(JSON.stringify(EMPTY)), editing: null, status: "" }),
+      save: this.save,
+      exportJson: () => {
+        const text = JSON.stringify(deck, null, 2);
+        if (navigator.clipboard) navigator.clipboard.writeText(text).then(() => this.setState({ status: "Deck JSON copied to clipboard." }), () => this.setState({ status: "Copy failed — check console." }));
+        console.log(text);
+      },
+      resetAll: () => { this.persist([], {}); this.setState({ i: 0, status: "Your additions and edits were removed." }); },
+      partRows: this.state.draft.parts.map((p, j) => ({
+        form: p.form, lang: p.lang, gloss: p.gloss,
+        hForm: this.setPart(j, "form"), hLang: this.setPart(j, "lang"), hGloss: this.setPart(j, "gloss"),
+        remove: () => this.setState(s => ({ draft: Object.assign({}, s.draft, { parts: s.draft.parts.length > 1 ? s.draft.parts.filter((_, k) => k !== j) : s.draft.parts }) }))
+      })),
+      rows: deck.map((c, k) => ({
+        word: c.word, origin: c.origin, literal: c.literal,
+        removable: !!c.custom,
+        badge: c.custom ? "yours" : (c.edited ? "edited" : ""),
+        badgeStyle: { fontSize: "10px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase",
+          color: "#5c2a4e", background: "#f4eaf0", border: "1px solid #e4d2dd", borderRadius: "999px",
+          padding: "2px 8px", display: (c.custom || c.edited) ? "block" : "none" },
+        rowStyle: { display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px", flexWrap: "wrap",
+          padding: "14px 18px", borderTop: k === 0 ? "none" : "1px solid #ece3dc" },
+        view: () => this.setState({ view: "cards", i: k, flipped: false }),
+        edit: () => this.setState({ draft: toDraft(c), editing: { kind: c.custom ? "custom" : "builtin", word: c.word, index: k - BUILT_IN.length }, status: "" }),
+        remove: () => { const custom = this.state.custom.filter((_, j) => j !== (k - BUILT_IN.length)); this.persist(custom, null); this.setState({ i: 0, status: "Removed " + c.word + "." }); }
+      })),
+      showExample: this.props.showExample ?? true,
+      showRelated: this.props.showRelated ?? true,
+      innerStyle: { position: "relative", width: "100%", height: "100%", transformStyle: "preserve-3d",
+        transition: instant ? "none" : "transform 620ms cubic-bezier(0.22, 0.7, 0.2, 1)",
+        transform: this.state.flipped ? "rotateY(180deg)" : "rotateY(0deg)" },
+      barStyle: { height: "1px", background: "#d5c9c2", alignSelf: "stretch",
+        marginLeft: `calc((100% - ${(n - 1) * gap}px) / ${2 * n})`,
+        marginRight: `calc((100% - ${(n - 1) * gap}px) / ${2 * n})` },
+      dots: deck.map((wd, k) => ({
+        go: (e) => { e.stopPropagation(); this.setState({ i: k, flipped: false }); },
+        style: { width: k === idx ? "22px" : "8px", height: "8px", borderRadius: "999px",
+          background: k === idx ? "#5c2a4e" : "#ded3ca", cursor: "pointer", transition: "width 200ms ease, background 200ms ease" }
+      }))
+    };
+  }
+}
+
+</script>
+</body>
+</html>
