@@ -23,8 +23,7 @@
 </style>
 </helmet>
 <div style="min-height: 100vh; padding: clamp(14px, 3.5vw, 36px) clamp(12px, 3.5vw, 28px) 72px; display: flex; flex-direction: column; align-items: center; gap: clamp(18px, 3vw, 26px); font-family: 'Public Sans', system-ui, sans-serif;">
-
-  <div style="width: 100%; max-width: 880px; display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; border-bottom: 1px solid #e2d8d0; padding-bottom: 13px; flex-wrap: wrap;">
+  <div style="position: fixed; top: 0; left: 0; right: 0; z-index: 20; background: #f7f2ec; border-bottom: 1px solid #e2d8d0; padding: 10px clamp(14px, 4vw, 28px) 12px;"><div style="width: 100%; max-width: 880px; margin: 0 auto; display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
     <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1 1 200px;">
       <div style="font-family: Bitter, Georgia, serif; font-size: clamp(21px, 5vw, 25px); font-weight: 700; letter-spacing: -0.01em;">{{ t.title }}</div>
       <div style="font-size: 13px; color: #7c6f74; text-wrap: pretty;">{{ breadcrumb }}</div>
@@ -64,7 +63,7 @@
         </div>
       </sc-if>
     </div>
-  </div>
+  </div></div><div style="height: 92px;"></div>
 
   <sc-if value="{{ isLang }}" hint-placeholder-val="{{ true }}">
     <div style="width: 100%; max-width: 880px; display: flex; flex-direction: column; gap: 18px;">
@@ -81,7 +80,7 @@
             <rect y="15" width="60" height="10" fill="#c8102e"></rect>
           </svg>
           <div style="display: flex; flex-direction: column; gap: 2px; text-align: left; min-width: 0;">
-            <div style="font-family: Bitter, Georgia, serif; font-size: 19px; font-weight: 600;">English</div>
+            <div style="font-family: Bitter, Georgia, serif; font-size: clamp(16px, 3.6vw, 20px); font-weight: 600;">English</div>
             <div style="font-size: 13px; color: #7c6f74;">England</div>
           </div>
         </button>
@@ -93,7 +92,7 @@
             <rect x="40" width="20" height="40" fill="#ef4135"></rect>
           </svg>
           <div style="display: flex; flex-direction: column; gap: 2px; text-align: left; min-width: 0;">
-            <div style="font-family: Bitter, Georgia, serif; font-size: 19px; font-weight: 600;">Français</div>
+            <div style="font-family: Bitter, Georgia, serif; font-size: clamp(16px, 3.6vw, 20px); font-weight: 600;">Français</div>
             <div style="font-size: 13px; color: #7c6f74;">France</div>
           </div>
         </button>
@@ -105,7 +104,7 @@
             <rect x="40" width="20" height="40" fill="#ce1126"></rect>
           </svg>
           <div style="display: flex; flex-direction: column; gap: 2px; text-align: left; min-width: 0;">
-            <div style="font-family: Bitter, Georgia, serif; font-size: 19px; font-weight: 600;">Română</div>
+            <div style="font-family: Bitter, Georgia, serif; font-size: clamp(16px, 3.6vw, 20px); font-weight: 600;">Română</div>
             <div style="font-size: 13px; color: #7c6f74;">România</div>
           </div>
         </button>
@@ -116,14 +115,14 @@
             <rect y="10" width="60" height="20" fill="#f1bf00"></rect>
           </svg>
           <div style="display: flex; flex-direction: column; gap: 2px; text-align: left; min-width: 0;">
-            <div style="font-family: Bitter, Georgia, serif; font-size: 19px; font-weight: 600;">Español</div>
+            <div style="font-family: Bitter, Georgia, serif; font-size: clamp(16px, 3.6vw, 20px); font-weight: 600;">Español</div>
             <div style="font-size: 13px; color: #7c6f74;">España</div>
           </div>
         </button>
       </div>
 
       <div style="display: flex; flex-direction: column; gap: 14px; border-top: 1px solid #e2d8d0; padding-top: 18px; margin-top: 6px;">
-        <div style="font-size: 13px; color: #7c6f74;">{{ t.credit }}</div>
+        
         <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
           <sc-if value="{{ hasLinkedIn }}" hint-placeholder-val="{{ false }}">
           <a href="{{ linkedinUrl }}" target="_blank" rel="noopener" style="min-height: 44px; display: inline-flex; align-items: center; gap: 9px; font-size: 14px; font-weight: 500; text-decoration: none; border: 1px solid #cdbfc6; border-radius: 5px; padding: 0 15px;">
@@ -147,7 +146,7 @@
               <path d="M20.5 12.6a7.5 7.5 0 0 1-7.5 7.4 8 8 0 0 1-3.3-.7L4.2 21l1.4-4.6a7.2 7.2 0 0 1-1.1-3.8 7.5 7.5 0 0 1 7.5-7.4 7.5 7.5 0 0 1 8.5 7.4z"></path>
               <path d="M13 9.6v5.2M10.4 12.2h5.2"></path>
             </svg>
-            {{ t.suggestTitle }}
+            <span style="white-space: nowrap;">{{ t.suggestBtn }}</span>
           </button>
         </div>
       </div>
@@ -248,49 +247,56 @@
             <div style="{{ catLabelStyle }}">{{ cat0.name }}</div>
             <div style="font-size: 13px; color: #7c6f74; text-align: left;">{{ cat0.count }}</div>
           </div>
-          <img src="uploads/random--samples.png" alt="Mixed words" style="width: 30px; height: 30px; flex: 0 0 auto; object-fit: contain;" />
+          <img src="uploads/tags.png" alt="" style="width: 30px; height: 30px; flex: 0 0 auto; object-fit: contain;" />
         </button>
         <button onClick="{{ cat1.pick }}" style="{{ catTileStyle }}">
           <div style="display: flex; flex-direction: column; justify-content: center; gap: 5px; min-width: 0; flex: 1 1 auto;">
             <div style="{{ catLabelStyle }}">{{ cat1.name }}</div>
             <div style="font-size: 13px; color: #7c6f74; text-align: left;">{{ cat1.count }}</div>
           </div>
-          <img src="uploads/pizza.png" alt="Italian food" style="width: 30px; height: 30px; flex: 0 0 auto; object-fit: contain;" />
+          <img src="uploads/automobile.png" alt="" style="width: 30px; height: 30px; flex: 0 0 auto; object-fit: contain;" />
         </button>
         <button onClick="{{ cat2.pick }}" style="{{ catTileStyle }}">
           <div style="display: flex; flex-direction: column; justify-content: center; gap: 5px; min-width: 0; flex: 1 1 auto;">
             <div style="{{ catLabelStyle }}">{{ cat2.name }}</div>
             <div style="font-size: 13px; color: #7c6f74; text-align: left;">{{ cat2.count }}</div>
           </div>
-          <img src="uploads/banking.png" alt="Finance" style="width: 30px; height: 30px; flex: 0 0 auto; object-fit: contain;" />
+          <svg viewBox="0 0 24 24" fill="none" stroke="#5c2a4e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width: 30px; height: 30px; flex: 0 0 auto;"><circle cx="12" cy="12" r="8.4"></circle><path d="M3.6 12h16.8"></path><path d="M12 3.6c2.4 2.4 3.6 5.2 3.6 8.4s-1.2 6-3.6 8.4c-2.4-2.4-3.6-5.2-3.6-8.4s1.2-6 3.6-8.4z"></path></svg>
         </button>
         <button onClick="{{ cat3.pick }}" style="{{ catTileStyle }}">
           <div style="display: flex; flex-direction: column; justify-content: center; gap: 5px; min-width: 0; flex: 1 1 auto;">
             <div style="{{ catLabelStyle }}">{{ cat3.name }}</div>
             <div style="font-size: 13px; color: #7c6f74; text-align: left;">{{ cat3.count }}</div>
           </div>
-          <img src="uploads/medical.png" alt="Medicine" style="width: 30px; height: 30px; flex: 0 0 auto; object-fit: contain;" />
+          <img src="uploads/banking.png" alt="" style="width: 30px; height: 30px; flex: 0 0 auto; object-fit: contain;" />
         </button>
         <button onClick="{{ cat4.pick }}" style="{{ catTileStyle }}">
           <div style="display: flex; flex-direction: column; justify-content: center; gap: 5px; min-width: 0; flex: 1 1 auto;">
             <div style="{{ catLabelStyle }}">{{ cat4.name }}</div>
             <div style="font-size: 13px; color: #7c6f74; text-align: left;">{{ cat4.count }}</div>
           </div>
-          <img src="uploads/automobile.png" alt="Car names" style="width: 30px; height: 30px; flex: 0 0 auto; object-fit: contain;" />
+          <img src="uploads/pizza.png" alt="" style="width: 30px; height: 30px; flex: 0 0 auto; object-fit: contain;" />
         </button>
         <button onClick="{{ cat5.pick }}" style="{{ catTileStyle }}">
           <div style="display: flex; flex-direction: column; justify-content: center; gap: 5px; min-width: 0; flex: 1 1 auto;">
             <div style="{{ catLabelStyle }}">{{ cat5.name }}</div>
             <div style="font-size: 13px; color: #7c6f74; text-align: left;">{{ cat5.count }}</div>
           </div>
-          <img src="uploads/tags.png" alt="Brand names" style="width: 30px; height: 30px; flex: 0 0 auto; object-fit: contain;" />
+          <img src="uploads/literature.png" alt="" style="width: 30px; height: 30px; flex: 0 0 auto; object-fit: contain;" />
         </button>
         <button onClick="{{ cat6.pick }}" style="{{ catTileStyle }}">
           <div style="display: flex; flex-direction: column; justify-content: center; gap: 5px; min-width: 0; flex: 1 1 auto;">
             <div style="{{ catLabelStyle }}">{{ cat6.name }}</div>
             <div style="font-size: 13px; color: #7c6f74; text-align: left;">{{ cat6.count }}</div>
           </div>
-          <img src="uploads/literature.png" alt="Latin proverbs" style="width: 30px; height: 30px; flex: 0 0 auto; object-fit: contain;" />
+          <img src="uploads/medical.png" alt="" style="width: 30px; height: 30px; flex: 0 0 auto; object-fit: contain;" />
+        </button>
+        <button onClick="{{ cat7.pick }}" style="{{ catTileStyle }}">
+          <div style="display: flex; flex-direction: column; justify-content: center; gap: 5px; min-width: 0; flex: 1 1 auto;">
+            <div style="{{ catLabelStyle }}">{{ cat7.name }}</div>
+            <div style="font-size: 13px; color: #7c6f74; text-align: left;">{{ cat7.count }}</div>
+          </div>
+          <img src="uploads/random--samples.png" alt="" style="width: 30px; height: 30px; flex: 0 0 auto; object-fit: contain;" />
         </button>
       </div>
     </div>
@@ -298,52 +304,25 @@
 
   <sc-if value="{{ isLobby }}" hint-placeholder-val="{{ false }}">
     <div style="width: 100%; max-width: 880px; display: flex; flex-direction: column; gap: 16px;">
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 14px; align-items: start;">
 
-        <div style="background: #fffdfa; border: 1px solid #e2d8d0; border-radius: 5px; padding: clamp(18px, 4vw, 24px); display: flex; flex-direction: column; gap: 13px;">
-          <div style="font-family: Bitter, Georgia, serif; font-size: 18px; font-weight: 600;">{{ t.soloTitle }}</div>
-          <div style="font-size: 13px; line-height: 1.5; color: #7c6f74; text-wrap: pretty;">{{ t.soloSub }}</div>
-          <input value="{{ soloName }}" onChange="{{ setSoloName }}" onKeyDown="{{ soloKey }}" placeholder="{{ t.yourName }}" style="min-height: 46px; padding: 0 12px; border: 1px solid #ded3ca; border-radius: 5px; background: #fff; color: #241f22;" />
-          <button onClick="{{ startSolo }}" style="min-height: 48px; font-size: 15px; color: #fffdfa; background: #5c2a4e; border: 1px solid #5c2a4e; border-radius: 5px; padding: 0 20px; cursor: pointer;" style-hover="background: #47203c;">{{ t.startMine }}</button>
-        </div>
-
-        <div style="background: #fffdfa; border: 1px solid #e2d8d0; border-radius: 5px; padding: clamp(18px, 4vw, 24px); display: flex; flex-direction: column; gap: 13px;">
-          <div style="font-family: Bitter, Georgia, serif; font-size: 18px; font-weight: 600;">{{ t.passTitle }}</div>
-          <div style="font-size: 13px; line-height: 1.5; color: #7c6f74; text-wrap: pretty;">{{ t.passSub }}</div>
-          <div style="display: flex; gap: 8px;">
-            <input value="{{ nameDraft }}" onChange="{{ setName }}" onKeyDown="{{ nameKey }}" placeholder="{{ t.playerName }}" style="flex: 1 1 auto; min-width: 0; min-height: 46px; padding: 0 12px; border: 1px solid #ded3ca; border-radius: 5px; background: #fff; color: #241f22;" />
-            <button onClick="{{ addPlayer }}" style="min-height: 46px; font-size: 15px; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 5px; padding: 0 16px; cursor: pointer;" style-hover="background: #efe7df;">{{ t.add }}</button>
-          </div>
-          <div style="display: flex; flex-direction: column;">
-            <sc-for list="{{ playerRows }}" as="p" hint-placeholder-count="0">
-              <div style="{{ p.rowStyle }}">
-                <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
-                  <div style="{{ p.chipStyle }}">{{ p.initial }}</div>
-                  <div style="font-size: 15px; font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ p.name }}</div>
-                </div>
-                <button onClick="{{ p.remove }}" style="min-height: 40px; font-size: 12px; color: #8a3324; background: transparent; border: 1px solid #e4d2cd; border-radius: 5px; padding: 0 11px; cursor: pointer;" style-hover="background: #f6ece9;">{{ t.remove }}</button>
-              </div>
-            </sc-for>
-          </div>
-          <button onClick="{{ startLocal }}" style="min-height: 48px; font-size: 15px; color: #241f22; background: transparent; border: 1px solid #5c2a4e; border-radius: 5px; padding: 0 20px; cursor: pointer;" style-hover="background: #f4eaf0;">{{ t.startPass }}</button>
-        </div>
-      </div>
-
-      <div style="display: flex; flex-direction: column; gap: 12px; background: #fffdfa; border: 1px solid #e2d8d0; border-radius: 5px; padding: 16px 18px;">
+      <div style="display: flex; flex-direction: column; gap: 12px; background: #fffdfa; border: 1px solid #e2d8d0; border-radius: 5px; padding: clamp(18px, 4vw, 24px);">
+        <div style="font-family: Bitter, Georgia, serif; font-size: 18px; font-weight: 600;">{{ t.playFriend }}</div>
+        <div style="font-size: 13px; color: #7c6f74; text-wrap: pretty;">{{ deckLine }}</div>
         <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 9px;">
-          <div style="font-size: 13px; color: #7c6f74; flex: 1 1 200px; text-wrap: pretty;">{{ deckLine }}</div>
-          <button onClick="{{ copyInvite }}" style="min-height: 44px; font-size: 14px; color: #fffdfa; background: #5c2a4e; border: 1px solid #5c2a4e; border-radius: 5px; padding: 0 16px; cursor: pointer;" style-hover="background: #47203c;">{{ t.copyInvite }}</button>
-          <button onClick="{{ copyDeckCode }}" style="min-height: 44px; font-size: 14px; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 5px; padding: 0 16px; cursor: pointer;" style-hover="background: #efe7df;">{{ t.copyDeckCode }}</button>
-          <a href="{{ waInvite }}" target="_blank" rel="noopener" style="min-height: 44px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 500; text-decoration: none; border: 1px solid #cdbfc6; border-radius: 5px; padding: 0 16px;">{{ t.sendWa }}</a>
-        </div>
-        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 9px; border-top: 1px solid #ece3dc; padding-top: 12px;">
-          <input value="{{ deckCodeDraft }}" onChange="{{ setDeckCode }}" placeholder="{{ t.pasteDeck }}" style="flex: 1 1 200px; min-width: 0; min-height: 44px; padding: 0 12px; border: 1px solid #ded3ca; border-radius: 5px; background: #fff; color: #241f22; font-size: 14px;" />
-          <button onClick="{{ loadDeckCode }}" style="min-height: 44px; font-size: 14px; color: #241f22; background: transparent; border: 1px solid #5c2a4e; border-radius: 5px; padding: 0 16px; cursor: pointer;" style-hover="background: #f4eaf0;">{{ t.loadDeck }}</button>
+          <a href="{{ waInvite }}" target="_blank" rel="noopener" style="min-height: 44px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 500; color: #fffdfa; background: #5c2a4e; text-decoration: none; border: 1px solid #5c2a4e; border-radius: 5px; padding: 0 16px;">{{ t.sendWa }}</a>
+          <button onClick="{{ copyInvite }}" style="min-height: 44px; font-size: 14px; color: #241f22; background: transparent; border: 1px solid #d9cec6; border-radius: 5px; padding: 0 16px; cursor: pointer;" style-hover="background: #efe7df;">{{ t.copyInvite }}</button>
           <sc-if value="{{ isGuest }}" hint-placeholder-val="{{ false }}">
             <button onClick="{{ leaveShared }}" style="min-height: 44px; font-size: 14px; color: #8a3324; background: transparent; border: 1px solid #e4d2cd; border-radius: 5px; padding: 0 14px; cursor: pointer;" style-hover="background: #f6ece9;">{{ t.ownDeck }}</button>
           </sc-if>
         </div>
       </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px; background: #fffdfa; border: 1px solid #e2d8d0; border-radius: 5px; padding: clamp(18px, 4vw, 24px);">
+        <div style="font-family: Bitter, Georgia, serif; font-size: 18px; font-weight: 600;">{{ t.soloTitle }}</div>
+        <div style="font-size: 13px; line-height: 1.5; color: #7c6f74; text-wrap: pretty;">{{ t.soloSub }}</div>
+        <button onClick="{{ startSolo }}" style="min-height: 48px; font-size: 15px; color: #fffdfa; background: #5c2a4e; border: 1px solid #5c2a4e; border-radius: 5px; padding: 0 20px; cursor: pointer; align-self: flex-start;" style-hover="background: #47203c;">{{ t.startMine }}</button>
+      </div>
+
       <div style="font-size: 13px; color: #5c2a4e; min-height: 18px;">{{ status }}</div>
       <template id="__bundler_thumbnail" data-bg-color="#5c2a4e"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#5c2a4e"/><g fill="none" stroke="#f7f2ec" stroke-width="4"><rect x="72" y="58" width="56" height="26" rx="3"/><path d="M100 84v16M62 100h76M62 100v16M138 100v16"/><rect x="36" y="116" width="52" height="26" rx="3"/><rect x="112" y="116" width="52" height="26" rx="3"/></g></svg></template>
     </div>
@@ -359,10 +338,11 @@
             <div style="{{ sLogoStyle }}"></div>
             <div style="font-family: Bitter, Georgia, serif; font-size: clamp(32px, 9vw, 62px); font-weight: 600; line-height: 1.05; letter-spacing: -0.02em; text-wrap: balance;">{{ sCard.word }}</div>
             <div style="{{ sAncestorStyle }}">
-              <div style="font-family: Bitter, Georgia, serif; font-size: clamp(17px, 5vw, 24px); font-weight: 600; color: #241f22; text-wrap: balance;">{{ sCard.source.form }}</div>
+              <div style="font-family: Bitter, Georgia, serif; font-size: clamp(17px, 5vw, 24px); font-weight: 600; color: #241f22; text-wrap: balance;">{{ sSrcMain }}</div>
+              
               <div style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">{{ sCard.source.lang }}</div>
             </div>
-            <div style="font-family: Bitter, Georgia, serif; font-style: italic; font-size: clamp(15px, 4vw, 20px); color: #7c6f74;">{{ sCard.ipa }}</div>
+            
             <div style="width: 44px; height: 1px; background: #e2d8d0;"></div>
             <div style="font-size: 13px; color: #a0928f; letter-spacing: 0.04em;">{{ t.tapReveal }}</div>
           </div>
@@ -370,7 +350,8 @@
           <div style="position: absolute; inset: 0; backface-visibility: hidden; transform: rotateY(180deg); background: #fffdfa; border: 1px solid #e2d8d0; border-radius: 5px; box-shadow: 0 1px 0 #e9e0d8, 0 18px 40px -30px rgba(36,31,34,0.3); padding: clamp(18px, 5vw, 34px); display: flex; flex-direction: column; gap: 13px; overflow: auto;">
             <div style="display: flex; flex-direction: column; align-items: center;">
               <div style="display: flex; flex-direction: column; align-items: center; border: 1px solid #cfc4bb; background: #f1eae2; border-radius: 5px; padding: 10px 20px; text-align: center;">
-                <div style="font-family: Bitter, Georgia, serif; font-size: clamp(17px, 5vw, 24px); font-weight: 600; color: #241f22;">{{ sCard.source.form }}</div>
+                <div style="font-family: Bitter, Georgia, serif; font-size: clamp(17px, 5vw, 24px); font-weight: 600; color: #241f22;">{{ sSrcMain }}</div>
+                <div style="{{ sSrcScriptStyle }}">{{ sSrcScript }}</div>
                 <div style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82; margin-top: 3px;">{{ sCard.source.lang }}</div>
               </div>
               <div style="width: 1px; height: 15px; background: #d5c9c2;"></div>
@@ -389,7 +370,7 @@
                         <div style="{{ part.wordsLabelStyle }}">{{ part.wordsLabel }}</div>
                         <div style="display: flex; flex-wrap: wrap; gap: 5px; justify-content: center;">
                           <sc-for list="{{ part.words }}" as="rw" hint-placeholder-count="2">
-                            <div style="{{ part.chipStyle }}">{{ rw }}</div>
+                            <button onClick="{{ rw.open }}" style="{{ rw.style }}">{{ rw.text }}</button>
                           </sc-for>
                           <div style="{{ part.noWordsStyle }}">{{ part.noWords }}</div>
                         </div>
@@ -401,8 +382,8 @@
             </div>
 
             <div style="display: flex; align-items: baseline; gap: 11px; border-top: 1px solid #ece3dc; border-bottom: 1px solid #ece3dc; padding: 12px 0; flex-wrap: wrap;">
-              <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">{{ t.literally }}</div>
-              <div style="font-family: Bitter, Georgia, serif; font-size: clamp(16px, 4.5vw, 20px); font-weight: 600; color: #5c2a4e; text-wrap: pretty;">{{ sCard.literal }}</div>
+              <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #241f22;">{{ t.literally }}</div>
+              <div style="font-family: Bitter, Georgia, serif; font-size: clamp(16px, 4.5vw, 20px); font-weight: 600; color: #241f22; text-wrap: pretty;">{{ sCard.literal }}</div>
             </div>
 
             <div style="font-size: 14px; line-height: 1.55; color: #3f3639; text-wrap: pretty;">{{ sCard.def }}</div>
@@ -424,10 +405,7 @@
         </div>
         <button onClick="{{ studyNext }}" style="min-height: 46px; font-size: 14px; color: #fffdfa; background: #5c2a4e; border: 1px solid #5c2a4e; border-radius: 5px; padding: 0 18px; cursor: pointer;" style-hover="background: #47203c;">{{ t.nextWord }}</button>
       </div>
-      <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
-        <div></div>
-        <div style="font-size: 12px; color: #a0928f;">{{ t.keysHint }}</div>
-      </div>
+
     </div>
   </sc-if>
 
@@ -482,7 +460,8 @@
             <div style="display: flex; flex-direction: column; align-items: center; margin-top: 2px;">
               <div style="{{ logoStyle }}"></div>
               <div style="display: flex; flex-direction: column; align-items: center; border: 1px solid #cfc4bb; background: #f1eae2; border-radius: 5px; padding: 10px 20px; text-align: center;">
-                <div style="font-family: Bitter, Georgia, serif; font-size: clamp(17px, 5vw, 22px); font-weight: 600; color: #241f22;">{{ card.source.form }}</div>
+                <div style="font-family: Bitter, Georgia, serif; font-size: clamp(17px, 5vw, 22px); font-weight: 600; color: #241f22;">{{ srcMain }}</div>
+                <div style="{{ srcScriptStyle }}">{{ srcScript }}</div>
                 <div style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82; margin-top: 3px;">{{ card.source.lang }}</div>
               </div>
               <div style="width: 1px; height: 14px; background: #d5c9c2;"></div>
@@ -501,7 +480,7 @@
                         <div style="{{ part.wordsLabelStyle }}">{{ part.wordsLabel }}</div>
                         <div style="display: flex; flex-wrap: wrap; gap: 5px; justify-content: center;">
                           <sc-for list="{{ part.words }}" as="rw" hint-placeholder-count="2">
-                            <div style="{{ part.chipStyle }}">{{ rw }}</div>
+                            <button onClick="{{ rw.open }}" style="{{ rw.style }}">{{ rw.text }}</button>
                           </sc-for>
                           <div style="{{ part.noWordsStyle }}">{{ part.noWords }}</div>
                         </div>
@@ -513,8 +492,8 @@
             </div>
 
             <div style="display: flex; align-items: baseline; gap: 11px; border-top: 1px solid #ece3dc; border-bottom: 1px solid #ece3dc; padding: 12px 0; flex-wrap: wrap;">
-              <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8b7d82;">{{ t.literally }}</div>
-              <div style="font-family: Bitter, Georgia, serif; font-size: clamp(16px, 4.5vw, 20px); font-weight: 600; color: #5c2a4e; text-wrap: pretty;">{{ card.literal }}</div>
+              <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #241f22;">{{ t.literally }}</div>
+              <div style="font-family: Bitter, Georgia, serif; font-size: clamp(16px, 4.5vw, 20px); font-weight: 600; color: #241f22; text-wrap: pretty;">{{ card.literal }}</div>
             </div>
 
             <div style="font-size: 14px; line-height: 1.55; color: #3f3639; text-wrap: pretty;">{{ card.def }}</div>
@@ -782,24 +761,42 @@ function rootScore(word, form) {
   });
   return best;
 }
-// Words shown under each branch: the card's own related list, assigned to whichever
-// root it actually shares, plus other cards in the deck built on the same root.
-function splitByRoot(card, deck) {
+// Words shown under each branch, gathered in three passes so every root gets a family:
+// the card's own related list assigned to the root it shares, then cards anywhere in the
+// language built on the same root, then any card whose spelling still carries the root.
+function splitByRoot(card, deck, pool, roots) {
   const parts = card.parts || [];
   const buckets = parts.map(() => []);
   const spare = [];
+  const seen = { };
+  seen[bare(card.word)] = true;
+  const push = (i, word) => {
+    const k = bare(word);
+    if (!k || seen[k] || buckets[i].length >= 4) return;
+    seen[k] = true; buckets[i].push(word);
+  };
+
+  // Cards built on the same root lead, because those are the words a reader can actually
+  // open — putting them first keeps the clickable ones visible inside the four-chip cap.
+  const others = (pool && pool.length ? pool : (deck || []));
+  parts.forEach((p, i) => {
+    others.forEach(o => {
+      if (!o || bare(o.word) === bare(card.word)) return;
+      if ((o.parts || []).some(op => bare(op.form) && bare(op.form) === bare(p.form))) push(i, o.word);
+    });
+  });
+
+  // Then the authored family for the root: the words that genuinely descend from it
+  // rather than merely resembling it.
+  parts.forEach((p, i) => { ((roots || {})[p.form] || []).forEach(w => push(i, w)); });
+
   (card.related || []).forEach(rel => {
+    // Already placed under a branch by an earlier pass — a word must not also
+    // appear in the spare row (mouse under mūs, modest under medērī).
+    if (seen[bare(rel)]) return;
     let bi = -1, top = 0;
     parts.forEach((p, i) => { const sc = rootScore(rel, p.form); if (sc > top) { top = sc; bi = i; } });
-    if (bi === -1) spare.push(rel); else buckets[bi].push(rel);
-  });
-  (deck || []).forEach(other => {
-    if (!other || other.word === card.word) return;
-    parts.forEach((p, i) => {
-      if (buckets[i].length >= 5) return;
-      const shares = (other.parts || []).some(op => bare(op.form) && bare(op.form) === bare(p.form));
-      if (shares && buckets[i].indexOf(other.word) === -1) buckets[i].push(other.word);
-    });
+    if (bi === -1) spare.push(rel); else push(bi, rel);
   });
   return { buckets: buckets, spare: spare };
 }
@@ -808,7 +805,8 @@ function splitByRoot(card, deck) {
 // original script sits under it, so a reader who knows no Greek is not blocked at line one.
 function splitScript(form) {
   const parts = String(form || "").split("·").map(p => p.trim()).filter(Boolean);
-  const nonLatin = (t) => /[^\u0000-\u024F\u1E00-\u1EFF\s\u2000-\u206F.,'()\-]/.test(t);
+  // Romanisations carry modifier letters (taʿrīf, ḥashīshiyyīn) — those are still Latin.
+  const nonLatin = (t) => /[^\u0000-\u024F\u02B0-\u02FF\u1E00-\u1EFF\s\u2000-\u206F.,'()\-]/.test(t);
   if (parts.length < 2) return { main: parts[0] || "", script: "" };
   const script = parts.filter(nonLatin), latin = parts.filter(p => !nonLatin(p));
   if (!script.length || !latin.length) return { main: parts.join(" · "), script: "" };
@@ -920,6 +918,33 @@ class Component extends DCLogic {
   tr = (key) => pick((D().T || {})[key] || "", this.state.li);
   key = () => this.state.li + "|" + this.state.cat;
 
+  // Every card in the chosen language, across categories — the pool the branch words are
+  // drawn from, and the index that decides which of them can be opened as a flashcard.
+  allCards() {
+    const data = D(), li = this.state.li, out = [];
+    (data.CATS || []).forEach(c => {
+      (data.WORDS[c.id] || []).forEach(raw => {
+        const m = materialize(raw, li); m.cat = c.id; out.push(m);
+      });
+      (this.state.custom[li + "|" + c.id] || []).forEach(cu => {
+        out.push(Object.assign({}, cu, { cat: c.id }));
+      });
+    });
+    return out;
+  }
+
+  // Opening a branch word: stay put if it is in this deck, otherwise switch category to it.
+  openWord = (word) => {
+    const hit = this.allCards().find(c => bare(c.word) === bare(word));
+    if (!hit) return;
+    const jump = () => {
+      const idx = this.playDeck().findIndex(c => bare(c.word) === bare(word));
+      this.setState({ studyPos: idx >= 0 ? idx : 0, flipped: false, status: "" });
+    };
+    if (hit.cat === this.state.cat && !this.state.shared) jump();
+    else this.setState({ cat: hit.cat, shared: null, flipped: false }, jump);
+  };
+
   catCards() {
     const li = this.state.li;
     const base = (D().WORDS[this.state.cat] || []).map(c => materialize(c, li));
@@ -970,8 +995,7 @@ class Component extends DCLogic {
   };
 
   startSolo = () => {
-    const n = this.state.soloName.trim();
-    if (!n) { this.setState({ status: this.tr("needName") }); return; }
+    const n = this.state.soloName.trim() || "Player";
     if (this.playDeck().length < 3) { this.setState({ status: this.tr("needWords") }); return; }
     put(K.me, n); this.setPlayers([{ name: n, score: 0 }]);
     this.setState({ view: "play", mode: "game", soloRound: true, pos: 0, turn: 0, answered: null, status: "" });
@@ -1084,17 +1108,34 @@ class Component extends DCLogic {
       // Wrapping is a second safety net: if the row is ever narrower than the viewport
       // suggests, branches drop to the next line instead of crushing under chip width.
       : { width: "100%", display: "flex", alignItems: "flex-start", gap: "28px", flexWrap: "wrap" };
-    const branchCols = (c) => {
-      const split = splitByRoot(c, play);
+    const cardIndex = this.allCards();
+    const openable = {};
+    cardIndex.forEach(c => { openable[bare(c.word)] = true; });
+    const branchCols = (c, live) => {
+      const split = splitByRoot(c, play, cardIndex, data.ROOTS);
       const stack = isStacked(c);
       return (c.parts || []).map((p, i) => {
         const b = BRANCH[i % BRANCH.length];
-        const words = split.buckets[i] || [];
+        const bucket = (split.buckets[i] || []).slice().sort((a, z) =>
+          (openable[bare(z)] ? 1 : 0) - (openable[bare(a)] ? 1 : 0));
+        const words = bucket.map(w => {
+          const can = live && !!openable[bare(w)];
+          // Every chip swallows the click: the study card flips on tap, and a word
+          // should never do both at once.
+          return { text: w, open: (e) => { e.stopPropagation(); if (can) this.openWord(w); },
+            style: { fontSize: "12px", borderRadius: "999px", padding: "5px 11px",
+              border: "1px solid " + b.edge, background: "#fffdfa", maxWidth: "100%",
+              overflowWrap: "anywhere", fontFamily: "'Public Sans', system-ui, sans-serif",
+              color: can ? b.ink : "#3f3639", fontWeight: can ? 500 : 400,
+              textDecoration: can ? "underline" : "none",
+              textDecorationColor: can ? b.edge : "transparent", textUnderlineOffset: "3px",
+              cursor: can ? "pointer" : "default" } };
+        });
         return {
           colStyle: stack
             ? { width: "100%", flex: "0 0 auto", display: "flex", flexDirection: "column", alignItems: "center" }
             : { flex: "1 1 150px", minWidth: "140px", display: "flex", flexDirection: "column", alignItems: "center" },
-          form: p.form, lang: p.lang, gloss: p.gloss, words: words, hasWords: true,
+          form: p.form, lang: p.lang, gloss: p.gloss, hasWords: true,
           // Grammatical affixes (-culus, com-) head no family of their own; say so rather
           // than leaving a silent hole under one branch.
           noWords: words.length ? "" : "—",
@@ -1111,9 +1152,7 @@ class Component extends DCLogic {
           noWordsStyle: { fontSize: "13px", color: "#a0928f", display: words.length ? "none" : "block" },
           wordsLabelStyle: { fontSize: "10px", fontWeight: 600, letterSpacing: "0.1em",
             textTransform: "uppercase", color: b.ink, textAlign: "center" },
-          chipStyle: { fontSize: "12px", color: "#3f3639", background: "#fffdfa",
-            border: "1px solid " + b.edge, borderRadius: "999px", padding: "4px 10px",
-            maxWidth: "100%", overflowWrap: "anywhere" }
+          words: words
         };
       });
     };
@@ -1146,7 +1185,8 @@ class Component extends DCLogic {
     const chip = (i) => ({ width: "28px", height: "28px", borderRadius: "999px", flex: "0 0 auto",
       display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", fontWeight: 600,
       color: "#fffdfa", background: HUES[i % HUES.length] });
-    const tile = { display: "flex", alignItems: "center", gap: "14px", minHeight: "76px", padding: "14px 16px",
+        const S = (base, min, max) => Math.round(Math.min(max, Math.max(min, base * (this.state.vw || 900) / 900))) + "px";
+    const tile = { display: "flex", alignItems: "center", gap: "14px", minHeight: S(66, 54, 80), padding: "14px 16px",
       cursor: "pointer", background: "#fffdfa", border: "1px solid #e2d8d0", borderRadius: "5px", color: "#241f22",
       textAlign: "left", transition: "border-color 150ms ease, background 150ms ease" };
     const did = this.deckId();
@@ -1188,8 +1228,8 @@ class Component extends DCLogic {
       isAdminUser: this.state.isAdminUser,
       logoStyle: logoBox(card.logo, "clamp(48px, 13vw, 66px)", "0 0 12px"),
       sLogoStyle: logoBox(sCard.logo, "clamp(56px, 16vw, 84px)", "0"),
-      treeParts: branchCols(card),
-      sTreeParts: branchCols(sCard),
+      treeParts: branchCols(card, false),
+      sTreeParts: branchCols(sCard, true),
       // On many cards the ancestor form IS the modern spelling (carpe diem, spaghetti,
       // Porsche); printing it twice on the card front tells the reader nothing.
       // Case-only comparison: a macron (vīrus) or a word split (tirami sù) is still
@@ -1205,8 +1245,8 @@ class Component extends DCLogic {
       sSrcScriptStyle: scriptLine(splitScript(sCard.source.form).script),
       treeRowStyle: branchRow(card),
       sTreeRowStyle: branchRow(sCard),
-      spareWords: splitByRoot(card, play).spare,
-      sSpareWords: splitByRoot(sCard, play).spare,
+      spareWords: splitByRoot(card, play, cardIndex, data.ROOTS).spare,
+      sSpareWords: splitByRoot(sCard, play, cardIndex, data.ROOTS).spare,
       breadcrumb: v === "lang" ? ""
         : v === "feedback" ? T.feedback : v === "suggest" ? T.suggestTitle
         : [langNative, v === "mode" ? "" : (this.state.mode === "study" ? T.study : T.game), (v === "mode" || v === "cat") ? "" : catName(this.state.cat)].filter(Boolean).join(" · "),
@@ -1217,16 +1257,16 @@ class Component extends DCLogic {
       goAdmin: () => this.setState({ view: v === "admin" ? (backMap.admin) : "admin", status: "" }),
 
       tileStyle: tile,
-      bigTileStyle: Object.assign({}, tile, { alignItems: "center", justifyContent: "space-between", gap: "16px", minHeight: "128px", padding: "20px 22px" }),
+      bigTileStyle: Object.assign({}, tile, { alignItems: "center", justifyContent: "space-between", gap: "16px", minHeight: S(110, 88, 136), padding: S(18, 12, 24) + " " + S(22, 14, 30) }),
       pickEn: () => this.setState({ li: 0, view: "mode", status: "" }),
       pickFr: () => this.setState({ li: 1, view: "mode", status: "" }),
       pickRo: () => this.setState({ li: 2, view: "mode", status: "" }),
       pickEs: () => this.setState({ li: 3, view: "mode", status: "" }),
       chooseStudy: () => this.setState({ mode: "study", view: "cat", status: "" }),
       chooseGame: () => this.setState({ mode: "game", view: "cat", status: "" }),
-      catTileStyle: Object.assign({}, tile, { alignItems: "center", justifyContent: "space-between", gap: "14px", minHeight: "96px", padding: "16px 18px" }),
-      catLabelStyle: { fontFamily: "Bitter, Georgia, serif", fontSize: "19px", fontWeight: 600, textAlign: "left", textWrap: "pretty" },
-      cat0: catTile(0), cat1: catTile(1), cat2: catTile(2), cat3: catTile(3), cat4: catTile(4), cat5: catTile(5), cat6: catTile(6),
+      catTileStyle: Object.assign({}, tile, { alignItems: "center", justifyContent: "space-between", gap: "14px", minHeight: S(82, 70, 100), padding: S(16, 12, 20) + " " + S(18, 14, 22) }),
+      catLabelStyle: { fontFamily: "Bitter, Georgia, serif", fontSize: S(19, 16, 22), fontWeight: 600, textAlign: "left", textWrap: "pretty" },
+      cat0: catTile(0), cat1: catTile(1), cat2: catTile(2), cat3: catTile(3), cat4: catTile(4), cat5: catTile(5), cat6: catTile(6), cat7: catTile(7),
 
       soloName: this.state.soloName,
       setSoloName: (e) => this.setState({ soloName: e.target.value }),
@@ -1289,7 +1329,7 @@ class Component extends DCLogic {
       turnChipStyle: chip(turn),
       prompt: askWord ? T.promptWord : T.promptMeaning,
       headline: askWord ? (card.parts || []).map(p => p.form).join(" + ") : card.word,
-      subline: askWord ? (card.parts || []).map(p => p.gloss).join(" · ") : card.ipa,
+      subline: askWord ? (card.parts || []).map(p => p.gloss).join(" · ") : "",
       headlineStyle: { fontFamily: "Bitter, Georgia, serif", fontWeight: 600, letterSpacing: "-0.02em",
         lineHeight: 1.05, fontSize: askWord ? "clamp(24px, 6.5vw, 40px)" : "clamp(30px, 8.5vw, 54px)", textWrap: "balance" },
       options: opts.map((o, i) => {
